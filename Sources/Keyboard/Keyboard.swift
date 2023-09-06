@@ -67,6 +67,12 @@ public struct Keyboard<Content>: View where Content: View {
                                                   initialSpacerRatio: initialSpacerRatio,
                                                   spacerRatio: spacerRatio,
                                                   relativeBlackKeyWidth: relativeBlackKeyWidth))
+            case let .dualistic(pitchRange, root, scale):
+                Dualistic(content: content,
+                           model: model,
+                           pitchRange: pitchRange,
+                           root: root,
+                           scale: scale)
             }
 
             if !latching {
@@ -116,6 +122,8 @@ public extension Keyboard where Content == KeyboardKey {
         case .verticalPiano:
             flatTop = true
             alignment = .trailing
+        case .dualistic:
+            alignment = .bottom
         }
         content = {
             KeyboardKey(
