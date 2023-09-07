@@ -116,6 +116,7 @@ public struct KeyboardKey: View {
                     .padding(.top, negativeTopPadding(proxy.size))
                     .padding(.leading, negativeLeadingPadding(proxy.size))
                     .padding(.trailing, 0.5)
+                    .aspectRatio(CGSize(width: 62, height: 279), contentMode: .fit)
                 Text(text)
                     .font(Font(.init(.system, size: relativeFontSize(in: proxy.size))))
                     .foregroundColor(textColor)

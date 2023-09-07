@@ -31,7 +31,6 @@ public enum KeyboardLayout: Equatable, Hashable {
                        spacerRatio: [Letter: CGFloat] = PianoSpacer.defaultSpacerRatio,
                        relativeBlackKeyWidth: CGFloat = PianoSpacer.defaultRelativeBlackKeyWidth)
     
-    /// All notes linearly right after one another
-    case dualistic(octaveCount: Int = 3)
+    case dualistic(octaveCount: Int = 2, tonicPitchClass: Int = 0)
 
 }
