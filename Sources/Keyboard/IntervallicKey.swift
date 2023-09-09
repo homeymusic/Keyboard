@@ -3,6 +3,10 @@
 import SwiftUI
 import Tonic
 
+public enum KeyType {
+    case symbol
+    case text
+}
 
 struct Home: Shape {
     func path(in rect: CGRect) -> Path {
@@ -23,12 +27,14 @@ public struct IntervallicKey: View {
     /// Initialize the keyboard key
     /// - Parameters:
     ///   - pitch: Pitch assigned to the key
+    ///   - keyType: Symbol or text type key
     ///   - tonicPitchClass: The tonic pitch class
     ///   - isActivated: Whether to represent this key in the "down" state
     ///   - text: Label on the key
     ///   - color: Color of the activated key
     ///   - isActivatedExternally: Usually used for representing incoming MIDI
     public init(pitch: Pitch,
+                keyType: KeyType,
                 tonicPitchClass: Int,
                 isActivated: Bool,
                 tonicColor: Color,
@@ -43,13 +49,15 @@ public struct IntervallicKey: View {
                 isActivatedExternally: Bool = false)
     {
         self.pitch = pitch
+        self.keyType = keyType
         self.tonicPitchClass = tonicPitchClass
         self.isActivated = isActivated
         self.flatTop = flatTop
         self.alignment = alignment
         self.isActivatedExternally = isActivatedExternally
         
-        switch (pitch.intValue - tonicPitchClass) % 12 {
+        self.pitchClass = (pitch.intValue - tonicPitchClass) % 12
+        switch self.pitchClass {
         case 0:
             self.iconColor = tonicColor
             self.homeIcon = true
@@ -78,6 +86,7 @@ public struct IntervallicKey: View {
     }
 
     var pitch: Pitch
+    var keyType: KeyType
     var tonicPitchClass: Int
     var isActivated: Bool
     var flatTop: Bool
@@ -86,6 +95,7 @@ public struct IntervallicKey: View {
     var keyColor: Color
     var iconColor: Color
     var homeIcon: Bool
+    let pitchClass: Int
     
     func minDimension(_ size: CGSize) -> CGFloat {
         return min(size.width, size.height)
@@ -122,6 +132,36 @@ public struct IntervallicKey: View {
         flatTop && alignment == .trailing ? -relativeCornerRadius(in: size) : 0.5
     }
 
+    func enharmonicDescription(_ pitchClass: Int) -> String {
+        switch pitchClass {
+        case 0:
+            return NoteClass.C.description
+        case 1:
+            return "\(NoteClass.Cs.description) \(NoteClass.Db.description)"
+        case 2:
+            return NoteClass.D.description
+        case 3:
+            return "\(NoteClass.Ds.description) \(NoteClass.Eb.description)"
+        case 4:
+            return NoteClass.E.description
+        case 5:
+            return NoteClass.F.description
+        case 6:
+            return "\(NoteClass.Fs.description) \(NoteClass.Gb.description)"
+        case 7:
+            return NoteClass.G.description
+        case 8:
+            return "\(NoteClass.Gs.description) \(NoteClass.Ab.description)"
+        case 9:
+            return NoteClass.A.description
+        case 10:
+            return "\(NoteClass.As.description) \(NoteClass.Bb.description)"
+        case 11:
+            return NoteClass.B.description
+        default: return NoteClass.C.description
+        }
+    }
+    
     public var body: some View {
         
         GeometryReader { proxy in
@@ -134,15 +174,22 @@ public struct IntervallicKey: View {
                     .padding(.top, negativeTopPadding(proxy.size))
                     .padding(.leading, negativeLeadingPadding(proxy.size))
                     .padding(.trailing, 0.5)
-                if (self.homeIcon) {
-                    Home()
-                        .stroke(self.iconColor, lineWidth: 2)
-                        .aspectRatio(1.0, contentMode: .fit)
-                        .frame(width: proxy.size.width*0.3, height: proxy.size.height*0.3)
-                } else {
-                    Circle()
+                if (self.keyType == .symbol) {
+                    if (self.homeIcon) {
+                        Home()
+                            .stroke(self.iconColor, lineWidth: 2)
+                            .aspectRatio(1.0, contentMode: .fit)
+                            .frame(width: proxy.size.width*0.3, height: proxy.size.height*0.3)
+                    } else {
+                        Circle()
+                            .foregroundColor(self.iconColor)
+                            .frame(width: proxy.size.width*0.2, height: proxy.size.height*0.2)
+                    }
+                } else if (self.keyType == .text) {
+                    Text(enharmonicDescription(self.pitchClass))
                         .foregroundColor(self.iconColor)
-                        .frame(width: proxy.size.width*0.2, height: proxy.size.height*0.2)
+                        .padding(.leading, 2)
+                        .padding(.trailing, 2)
                 }
             }
         }
