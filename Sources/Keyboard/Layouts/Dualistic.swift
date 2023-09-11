@@ -21,6 +21,7 @@ struct Dualistic<Content>: View where Content: View {
             let extraKeysPerSide : Int = Int(floor(CGFloat(keysPerRow - 13) / 2))
 
             VStack(spacing: 0) {
+                Spacer()
                 ForEach((1...(octaveCount)).reversed(), id: \.self) { row in
                     HStack(spacing: 0) {
                         ForEach(-extraKeysPerSide...(12+extraKeysPerSide), id: \.self) { col in
@@ -31,6 +32,7 @@ struct Dualistic<Content>: View where Content: View {
                     }
                     .frame(maxHeight: proxy.size.width / CGFloat(keysPerRow) * aspectRatio)
                 }
+                Spacer()
             }
         }
         .clipShape(Rectangle())
