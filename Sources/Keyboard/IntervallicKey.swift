@@ -55,9 +55,9 @@ public struct IntervallicKey: View {
         self.flatTop = flatTop
         self.alignment = alignment
         self.isActivatedExternally = isActivatedExternally
+        self.pitchClass = pitch.intValue % 12
         
-        self.pitchClass = (pitch.intValue - tonicPitchClass) % 12
-        switch self.pitchClass {
+        switch (pitch.intValue - tonicPitchClass) % 12 {
         case 0:
             self.iconColor = tonicColor
             self.homeIcon = true
@@ -188,8 +188,12 @@ public struct IntervallicKey: View {
                 } else if (self.keyType == .text) {
                     Text(enharmonicDescription(self.pitchClass))
                         .foregroundColor(self.iconColor)
-                        .padding(.leading, 2)
-                        .padding(.trailing, 2)
+                        .font(.headline)
+                        .scaledToFit()
+                        .minimumScaleFactor(0.01)
+                        .lineLimit(1)
+                        .padding(.leading, 3)
+                        .padding(.trailing, 3)
                 }
             }
         }

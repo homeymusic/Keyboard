@@ -7,18 +7,19 @@ struct Dualistic<Content>: View where Content: View {
     var octaveCount: Int
     var tonicPitchClass: Int
     let aspectRatio: CGFloat
-    let keysPerRow: Int = 25
     let lowestC: Int = 24
     let middleC: Int = 60
-    
 
     var body: some View {
         let middleOctave : Int = Int(floor(Double((octaveCount)/2) + 1) * 12)
         let middleTonic : Int = middleC - middleOctave + tonicPitchClass
-        let extraKeysPerSide : Int = Int(floor(CGFloat((keysPerRow - 13) / 2)))
         let aspectRatio: CGFloat = aspectRatio
 
         GeometryReader { proxy in
+
+            var keysPerRow: Int = (proxy.size.width > 800) ? 25 : 13
+            var extraKeysPerSide : Int = Int(floor(CGFloat(keysPerRow - 13) / 2))
+
             VStack(spacing: 0) {
                 ForEach((1...(octaveCount)).reversed(), id: \.self) { row in
                     HStack(spacing: 0) {
