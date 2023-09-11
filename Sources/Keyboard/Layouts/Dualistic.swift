@@ -17,8 +17,8 @@ struct Dualistic<Content>: View where Content: View {
 
         GeometryReader { proxy in
 
-            var keysPerRow: Int = (proxy.size.width > 800) ? 25 : 13
-            var extraKeysPerSide : Int = Int(floor(CGFloat(keysPerRow - 13) / 2))
+            let keysPerRow: Int = (proxy.size.width > 800) ? 25 : 13
+            let extraKeysPerSide : Int = Int(floor(CGFloat(keysPerRow - 13) / 2))
 
             VStack(spacing: 0) {
                 ForEach((1...(octaveCount)).reversed(), id: \.self) { row in
