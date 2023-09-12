@@ -28,7 +28,6 @@ public struct IntervallicKey: View {
     /// - Parameters:
     ///   - pitch: Pitch assigned to the key
     ///   - labelType: Symbol or text type key
-    ///   - keyAspectRatio: The aspect ratio of the key rectangle
     ///   - tonicPitchClass: The tonic pitch class
     ///   - isActivated: Whether to represent this key in the "down" state
     ///   - text: Label on the key
@@ -36,7 +35,6 @@ public struct IntervallicKey: View {
     ///   - isActivatedExternally: Usually used for representing incoming MIDI
     public init(pitch: Pitch,
                 labelType: LabelType,
-                keyAspectRatio: CGFloat,
                 tonicPitchClass: Int,
                 isActivated: Bool,
                 tonicColor: Color,
@@ -52,7 +50,6 @@ public struct IntervallicKey: View {
     {
         self.pitch = pitch
         self.labelType = labelType
-        self.keyAspectRatio = keyAspectRatio
         self.tonicPitchClass = tonicPitchClass
         self.isActivated = isActivated
         self.flatTop = flatTop
@@ -90,7 +87,6 @@ public struct IntervallicKey: View {
 
     var pitch: Pitch
     var labelType: LabelType
-    var keyAspectRatio: CGFloat
     var tonicPitchClass: Int
     var isActivated: Bool
     var flatTop: Bool
@@ -196,11 +192,10 @@ public struct IntervallicKey: View {
                         .scaledToFit()
                         .minimumScaleFactor(0.01)
                         .lineLimit(1)
-                        .padding(.leading, 3)
-                        .padding(.trailing, 3)
+                        .padding(.leading, 6)
+                        .padding(.trailing, 6)
                 }
             }
-            .aspectRatio(keyAspectRatio, contentMode: .fit)
         }
     }
 }

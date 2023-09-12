@@ -31,6 +31,6 @@ public enum KeyboardLayout: Equatable, Hashable {
                        spacerRatio: [Letter: CGFloat] = PianoSpacer.defaultSpacerRatio,
                        relativeBlackKeyWidth: CGFloat = PianoSpacer.defaultRelativeBlackKeyWidth)
     
-    case dualistic(octaveCount: Int = 1, tonicPitchClass: Int = 0)
+    case dualistic(octaveCount: Int, keysPerRow: Int, tonicPitchClass: Int = 0)
 
 }
