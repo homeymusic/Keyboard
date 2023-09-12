@@ -8,7 +8,6 @@ struct Dualistic<Content>: View where Content: View {
     var tonicPitchClass: Int
     let lowestC: Int = 24
     let middleC: Int = 60
-    var showTonicSelector: Bool = true
     
     var body: some View {
         let middleOctave : Int = Int(floor(Double((octaveCount)/2) + 1) * 12)
@@ -20,17 +19,6 @@ struct Dualistic<Content>: View where Content: View {
             let extraKeysPerSide : Int = Int(floor(CGFloat(keysPerRow - 13) / 2))
             
             VStack(spacing: 0) {
-                Spacer()
-                if (showTonicSelector) {
-                    HStack(spacing: 0) {
-                        ForEach(-extraKeysPerSide...(12+extraKeysPerSide), id: \.self) { col in
-                            KeyContainer(model: model,
-                                         pitch: Pitch(intValue: col + middleTonic),
-                                         content: content)
-                        }
-                    }
-                    .frame(maxHeight: proxy.size.width / CGFloat(keysPerRow) * 1.0)
-                }
                 ForEach((1...(octaveCount)).reversed(), id: \.self) { row in
                     HStack(spacing: 0) {
                         ForEach(-extraKeysPerSide...(12+extraKeysPerSide), id: \.self) { col in
@@ -39,9 +27,7 @@ struct Dualistic<Content>: View where Content: View {
                                          content: content)
                         }
                     }
-                    .frame(maxHeight: proxy.size.width / CGFloat(keysPerRow) * 4.5)
                 }
-                Spacer()
             }
         }
         .clipShape(Rectangle())

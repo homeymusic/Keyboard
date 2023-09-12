@@ -3,7 +3,7 @@
 import SwiftUI
 import Tonic
 
-public enum KeyType {
+public enum LabelType {
     case symbol
     case text
 }
@@ -27,14 +27,16 @@ public struct IntervallicKey: View {
     /// Initialize the keyboard key
     /// - Parameters:
     ///   - pitch: Pitch assigned to the key
-    ///   - keyType: Symbol or text type key
+    ///   - labelType: Symbol or text type key
+    ///   - keyAspectRatio: The aspect ratio of the key rectangle
     ///   - tonicPitchClass: The tonic pitch class
     ///   - isActivated: Whether to represent this key in the "down" state
     ///   - text: Label on the key
     ///   - color: Color of the activated key
     ///   - isActivatedExternally: Usually used for representing incoming MIDI
     public init(pitch: Pitch,
-                keyType: KeyType,
+                labelType: LabelType,
+                keyAspectRatio: CGFloat,
                 tonicPitchClass: Int,
                 isActivated: Bool,
                 tonicColor: Color,
@@ -49,7 +51,8 @@ public struct IntervallicKey: View {
                 isActivatedExternally: Bool = false)
     {
         self.pitch = pitch
-        self.keyType = keyType
+        self.labelType = labelType
+        self.keyAspectRatio = keyAspectRatio
         self.tonicPitchClass = tonicPitchClass
         self.isActivated = isActivated
         self.flatTop = flatTop
@@ -86,7 +89,8 @@ public struct IntervallicKey: View {
     }
 
     var pitch: Pitch
-    var keyType: KeyType
+    var labelType: LabelType
+    var keyAspectRatio: CGFloat
     var tonicPitchClass: Int
     var isActivated: Bool
     var flatTop: Bool
@@ -174,7 +178,7 @@ public struct IntervallicKey: View {
                     .padding(.top, negativeTopPadding(proxy.size))
                     .padding(.leading, negativeLeadingPadding(proxy.size))
                     .padding(.trailing, 0.5)
-                if (self.keyType == .symbol) {
+                if (self.labelType == .symbol) {
                     if (self.homeIcon) {
                         Home()
                             .stroke(self.iconColor, lineWidth: 2)
@@ -185,7 +189,7 @@ public struct IntervallicKey: View {
                             .foregroundColor(self.iconColor)
                             .frame(width: proxy.size.width*0.2, height: proxy.size.height*0.2)
                     }
-                } else if (self.keyType == .text) {
+                } else if (self.labelType == .text) {
                     Text(enharmonicDescription(self.pitchClass))
                         .foregroundColor(self.iconColor)
                         .font(.headline)
@@ -196,6 +200,7 @@ public struct IntervallicKey: View {
                         .padding(.trailing, 3)
                 }
             }
+            .aspectRatio(keyAspectRatio, contentMode: .fit)
         }
     }
 }
