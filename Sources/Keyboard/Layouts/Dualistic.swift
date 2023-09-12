@@ -6,22 +6,31 @@ struct Dualistic<Content>: View where Content: View {
     var model: KeyboardModel
     var octaveCount: Int
     var tonicPitchClass: Int
-    let aspectRatio: CGFloat
     let lowestC: Int = 24
     let middleC: Int = 60
-
+    var showTonicSelector: Bool = true
+    
     var body: some View {
         let middleOctave : Int = Int(floor(Double((octaveCount)/2) + 1) * 12)
         let middleTonic : Int = middleC - middleOctave + tonicPitchClass
-        let aspectRatio: CGFloat = aspectRatio
-
+        
         GeometryReader { proxy in
-
+            
             let keysPerRow: Int = (proxy.size.width > 800) ? 25 : 13
             let extraKeysPerSide : Int = Int(floor(CGFloat(keysPerRow - 13) / 2))
-
+            
             VStack(spacing: 0) {
                 Spacer()
+                if (showTonicSelector) {
+                    HStack(spacing: 0) {
+                        ForEach(-extraKeysPerSide...(12+extraKeysPerSide), id: \.self) { col in
+                            KeyContainer(model: model,
+                                         pitch: Pitch(intValue: col + middleTonic),
+                                         content: content)
+                        }
+                    }
+                    .frame(maxHeight: proxy.size.width / CGFloat(keysPerRow) * 1.0)
+                }
                 ForEach((1...(octaveCount)).reversed(), id: \.self) { row in
                     HStack(spacing: 0) {
                         ForEach(-extraKeysPerSide...(12+extraKeysPerSide), id: \.self) { col in
@@ -30,7 +39,7 @@ struct Dualistic<Content>: View where Content: View {
                                          content: content)
                         }
                     }
-                    .frame(maxHeight: proxy.size.width / CGFloat(keysPerRow) * aspectRatio)
+                    .frame(maxHeight: proxy.size.width / CGFloat(keysPerRow) * 4.5)
                 }
                 Spacer()
             }
