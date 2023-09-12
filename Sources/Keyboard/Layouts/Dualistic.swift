@@ -15,13 +15,16 @@ struct Dualistic<Content>: View where Content: View {
         let middleTonic : Int = middleC - middleOctave + tonicPitchClass
         
         let extraKeysPerSide : Int = Int(floor(CGFloat(keysPerRow - 13) / 2))
-        
-        ForEach((1...(octaveCount)).reversed(), id: \.self) { row in
-            HStack(spacing: 0) {
-                ForEach(-extraKeysPerSide...(12+extraKeysPerSide), id: \.self) { col in
-                    KeyContainer(model: model,
-                                 pitch: Pitch(intValue: row * 12 + col + middleTonic),
-                                 content: content)
+        let _ = print("octaveCount \(octaveCount)")
+        VStack(spacing: 0) {
+            ForEach((1...(octaveCount)).reversed(), id: \.self) { row in
+                let _ = print("row \(row)")
+                HStack(spacing: 0) {
+                    ForEach(-extraKeysPerSide...(12+extraKeysPerSide), id: \.self) { col in
+                        KeyContainer(model: model,
+                                     pitch: Pitch(intValue: row * 12 + col + middleTonic),
+                                     content: content)
+                    }
                 }
             }
         }
