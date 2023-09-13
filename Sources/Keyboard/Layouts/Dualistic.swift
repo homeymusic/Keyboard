@@ -1,6 +1,15 @@
 import SwiftUI
 import Tonic
 
+// safety valve
+func safeMIDI(_ p: Int) -> Int {
+    if p > -1 && p < 128 {
+        return p
+    } else {
+        return p % 12
+    }
+}
+
 struct Dualistic<Content>: View where Content: View {
     let content: (Pitch, Bool) -> Content
     var model: KeyboardModel
@@ -15,14 +24,12 @@ struct Dualistic<Content>: View where Content: View {
         let middleTonic : Int = middleC - middleOctave + tonicPitchClass
         
         let extraKeysPerSide : Int = Int(floor(CGFloat(keysPerRow - 13) / 2))
-        let _ = print("octaveCount \(octaveCount)")
         VStack(spacing: 0) {
             ForEach((1...(octaveCount)).reversed(), id: \.self) { row in
-                let _ = print("row \(row)")
                 HStack(spacing: 0) {
                     ForEach(-extraKeysPerSide...(12+extraKeysPerSide), id: \.self) { col in
                         KeyContainer(model: model,
-                                     pitch: Pitch(intValue: row * 12 + col + middleTonic),
+                                     pitch: Pitch(intValue: safeMIDI(row * 12 + col + middleTonic)),
                                      content: content)
                     }
                 }
