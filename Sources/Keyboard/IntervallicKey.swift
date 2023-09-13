@@ -62,26 +62,32 @@ public struct IntervallicKey: View {
             self.iconColor = tonicColor
             self.homeIcon = true
             self.keyColor = tonicKeyColor
+            self.homeKey = true
         case 5, 7:
             self.iconColor = perfectColor
             self.homeIcon = true
             self.keyColor = keyColor
+            self.homeKey = false
         case 2, 4, 9, 11:
             self.iconColor = majorColor
             self.homeIcon = false
             self.keyColor = keyColor
+            self.homeKey = false
         case 1, 3, 8, 10:
             self.iconColor = minorColor
             self.homeIcon = false
             self.keyColor = keyColor
+            self.homeKey = false
         case 6:
             self.iconColor = tritoneColor
             self.homeIcon = false
             self.keyColor = keyColor
+            self.homeKey = false
         default:
             self.iconColor = Color.black
             self.homeIcon = false
             self.keyColor = Color.white
+            self.homeKey = false
         }
     }
 
@@ -96,6 +102,7 @@ public struct IntervallicKey: View {
     var iconColor: Color
     var homeIcon: Bool
     let pitchClass: Int
+    let homeKey: Bool
     
     func minDimension(_ size: CGSize) -> CGFloat {
         return min(size.width, size.height)
@@ -165,38 +172,69 @@ public struct IntervallicKey: View {
     public var body: some View {
         
         GeometryReader { proxy in
-            ZStack(alignment: alignment) {
-                Rectangle()
-                    .foregroundColor(keyColor)
+            ZStack {
+                Rectangle().foregroundColor(.white)
                     .padding(.top, topPadding(proxy.size))
                     .padding(.leading, leadingPadding(proxy.size))
                     .cornerRadius(relativeCornerRadius(in: proxy.size))
                     .padding(.top, negativeTopPadding(proxy.size))
                     .padding(.leading, negativeLeadingPadding(proxy.size))
                     .padding(.trailing, 0.5)
-                if (self.labelType == .symbol) {
-                    if (self.homeIcon) {
-                        Home()
-                            .stroke(self.iconColor, lineWidth: 2)
-                            .aspectRatio(1.0, contentMode: .fit)
-                            .frame(width: proxy.size.width*0.3, height: proxy.size.height*0.3)
-                    } else {
-                        Circle()
+                ZStack(alignment: alignment) {
+                    Rectangle().foregroundColor(keyColor)
+                        .padding(.top, topPadding(proxy.size))
+                        .padding(.leading, leadingPadding(proxy.size))
+                        .cornerRadius(relativeCornerRadius(in: proxy.size))
+                        .padding(.top, negativeTopPadding(proxy.size))
+                        .padding(.leading, negativeLeadingPadding(proxy.size))
+                        .padding(.trailing, 0.5)
+                    if (self.labelType == .symbol) {
+                        if (self.homeIcon) {
+                            Home()
+                                .stroke(self.iconColor, lineWidth: 2)
+                                .aspectRatio(1.0, contentMode: .fit)
+                                .frame(width: proxy.size.width*0.3, height: proxy.size.height*0.3)
+                        } else {
+                            Circle()
+                                .foregroundColor(self.iconColor)
+                                .frame(width: proxy.size.width*0.2, height: proxy.size.height*0.2)
+                        }
+                    } else if (self.labelType == .text) {
+                        Text(enharmonicDescription(self.pitchClass))
                             .foregroundColor(self.iconColor)
-                            .frame(width: proxy.size.width*0.2, height: proxy.size.height*0.2)
+                            .font(.headline)
+                            .scaledToFit()
+                            .minimumScaleFactor(0.01)
+                            .lineLimit(1)
+                            .padding(3)
                     }
-                } else if (self.labelType == .text) {
-                    Text(enharmonicDescription(self.pitchClass))
-                        .foregroundColor(self.iconColor)
-                        .font(.headline)
-                        .scaledToFit()
-                        .minimumScaleFactor(0.01)
-                        .lineLimit(1)
-                        .padding(3)
                 }
+                .brightness((isActivated || isActivatedExternally) && self.labelType == .symbol ? (homeKey ? -0.2 : -0.1) : 0.0)
+                .mask(
+                    RadialGradient(colors: [.black.opacity(0.95), .black],
+                                   center: .bottom,
+                                   startRadius: 0,
+                                   endRadius: proxy.size.height * 0.4)
+                )
             }
-            .brightness((isActivated || isActivatedExternally) && self.labelType == .symbol ? -0.1 : 0.0)
-
         }
     }
+}
+
+struct IntervallicKey_Previews: PreviewProvider {
+    static var previews: some View {
+        ZStack {
+            Color.black
+            IntervallicKey(pitch: Pitch(64), labelType: .symbol, tonicPitchClass: 0, isActivated: false, tonicColor: Color(red: 102 / 255, green: 68 / 255, blue: 51 / 255),
+                           perfectColor: Color(red: 243 / 255, green: 221 / 255, blue: 171 / 255),
+                           majorColor: Color(red: 255 / 255, green: 176 / 255, blue: 0 / 255),
+                           minorColor: Color(red: 138 / 255, green: 197 / 255, blue: 320 / 255),
+                           tritoneColor: Color(red: 255 / 255, green: 85 / 255, blue: 0 / 255),
+                           keyColor: Color(red: 102 / 255, green: 68 / 255, blue: 51 / 255),
+                           tonicKeyColor: Color(red: 243 / 255, green: 221 / 255, blue: 171 / 255)
+            )
+            .frame(width: 40, height: 160)
+        }
+    }
+        
 }
