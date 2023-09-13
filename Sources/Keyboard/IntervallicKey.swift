@@ -212,7 +212,7 @@ public struct IntervallicKey: View {
                 .brightness((isActivated || isActivatedExternally) && self.labelType == .symbol ? (homeKey ? -0.2 : -0.1) : 0.0)
                 .mask(
                     RadialGradient(colors: [.black.opacity(0.95), .black],
-                                   center: .bottom,
+                                   center: isActivated ? .top : .bottom,
                                    startRadius: 0,
                                    endRadius: proxy.size.height * 0.4)
                 )
