@@ -174,7 +174,6 @@ public struct IntervallicKey: View {
                     .padding(.top, negativeTopPadding(proxy.size))
                     .padding(.leading, negativeLeadingPadding(proxy.size))
                     .padding(.trailing, 0.5)
-                    .brightness((isActivated || isActivatedExternally) ? -0.1 : 0.0)
                 if (self.labelType == .symbol) {
                     if (self.homeIcon) {
                         Home()
@@ -197,6 +196,7 @@ public struct IntervallicKey: View {
                         .padding(.trailing, 6)
                 }
             }
+            .brightness((isActivated || isActivatedExternally) ? -0.1 : 0.0)
         }
     }
 }
