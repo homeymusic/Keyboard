@@ -192,11 +192,11 @@ public struct IntervallicKey: View {
                         .scaledToFit()
                         .minimumScaleFactor(0.01)
                         .lineLimit(1)
-                        .padding(.leading, 6)
-                        .padding(.trailing, 6)
+                        .padding(3)
                 }
             }
-            .brightness((isActivated || isActivatedExternally) ? -0.1 : 0.0)
+            .brightness((isActivated || isActivatedExternally) && self.labelType == .symbol ? -0.1 : 0.0)
+
         }
     }
 }
