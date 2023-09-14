@@ -17,15 +17,16 @@ struct Dualistic<Content>: View where Content: View {
     var keysPerRow: Int
     var tonicPitchClass: Int
     let lowestC: Int = 24
-    let middleC: Int = 48
+    let initialC: Int = 48
     
     var body: some View {
-        let middleOctave : Int = Int(ceil(Double((octaveCount)/2) + 1) * 12)
-        let middleTonic : Int = middleC - middleOctave + tonicPitchClass
+        let middleOctave : Int = Int(ceil(Double((octaveCount-1000000)/2)) * 12)
+        let _ = print("middleOctave \(middleOctave)")
+        let middleTonic : Int = initialC + tonicPitchClass - middleOctave
         
         let extraKeysPerSide : Int = Int(floor(CGFloat(keysPerRow - 13) / 2))
         VStack(spacing: 0) {
-            ForEach((1...(octaveCount)).reversed(), id: \.self) { row in
+            ForEach((0...(octaveCount-1)).reversed(), id: \.self) { row in
                 HStack(spacing: 0) {
                     ForEach(-extraKeysPerSide...(12+extraKeysPerSide), id: \.self) { col in
                         KeyContainer(model: model,
