@@ -20,7 +20,7 @@ struct Dualistic<Content>: View where Content: View {
     let initialC: Int = 48
     
     var body: some View {
-        let middleOctave : Int = Int(ceil(Double((octaveCount-1000000)/2)) * 12)
+        let middleOctave : Int = Int(ceil(Double((octaveCount-1)/2)) * 12)
         let _ = print("middleOctave \(middleOctave)")
         let middleTonic : Int = initialC + tonicPitchClass - middleOctave
         
