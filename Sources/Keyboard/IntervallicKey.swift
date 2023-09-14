@@ -209,12 +209,12 @@ public struct IntervallicKey: View {
                             .padding(3)
                     }
                 }
-                .brightness((isActivated || isActivatedExternally) && self.labelType == .symbol ? (homeKey ? -0.2 : -0.1) : 0.0)
+                .brightness((isActivated || isActivatedExternally) && self.labelType == .symbol ? (homeKey ? 0.05 : -0.05) : 0.0)
                 .mask(
-                    RadialGradient(colors: [.black.opacity(0.95), .black],
+                    RadialGradient(colors: [.black.opacity(homeKey ? 0.775 : 0.95), .black],
                                    center: isActivated ? .top : .bottom,
                                    startRadius: 0,
-                                   endRadius: proxy.size.height * 0.4)
+                                   endRadius: proxy.size.height * 0.5)
                 )
             }
         }
