@@ -19,16 +19,16 @@ struct Dualistic<Content>: View where Content: View {
     let initialC: Int
     
     var body: some View {
-        let middleOctave : Int = Int(ceil(Double((octaveCount-1)/2)) * 12)
-        let middleTonic : Int = initialC + tonicPitchClass - middleOctave
+        let tonicPitch : Int = initialC + tonicPitchClass
         
-        let extraKeysPerSide : Int = Int(floor(CGFloat(keysPerRow - 13) / 2))
+        let extraColsPerSide : Int = Int(floor(CGFloat(keysPerRow - 13) / 2))
+        let extraRowsPerSide : Int = Int(floor(CGFloat(octaveCount - 1) / 2))
         VStack(spacing: 0) {
-            ForEach((0...(octaveCount-1)).reversed(), id: \.self) { row in
+            ForEach((-extraRowsPerSide...extraRowsPerSide).reversed(), id: \.self) { row in
                 HStack(spacing: 0) {
-                    ForEach(-extraKeysPerSide...(12+extraKeysPerSide), id: \.self) { col in
+                    ForEach(-extraColsPerSide...(12+extraColsPerSide), id: \.self) { col in
                         KeyContainer(model: model,
-                                     pitch: Pitch(intValue: safeMIDI(row * 12 + col + middleTonic)),
+                                     pitch: Pitch(intValue: safeMIDI(row * 12 + col + tonicPitch)),
                                      content: content)
                     }
                 }
