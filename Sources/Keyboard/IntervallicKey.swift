@@ -91,7 +91,7 @@ public struct IntervallicKey: View {
         
         if showPianoSelector {
             let homeyGray: Color = Color(red: 96/255, green: 96/255, blue: 96/255)
-
+            
             switch pitch.intValue % 12 {
             case 0:
                 self.iconColor = homeyGray
@@ -172,14 +172,21 @@ public struct IntervallicKey: View {
                 self.keyColor = keyColor
                 self.homeKey = false
             default:
-                self.iconColor = Color.black
+                self.iconColor = .black
                 self.intervalType = .dissonant
-                self.keyColor = Color.white
+                self.keyColor = .white
                 self.homeKey = false
+            }
+            
+            if showIntervals {
+                self.keyColor = .black
+                if self.homeKey {
+                    self.iconColor = tonicKeyColor
+                }
             }
         }
     }
-
+    
     var pitch: Pitch
     var labelType: LabelType
     var tonicPitchClass: Int
@@ -205,38 +212,38 @@ public struct IntervallicKey: View {
     func minDimension(_ size: CGSize) -> CGFloat {
         return min(size.width, size.height)
     }
-
+    
     func isTall(size: CGSize) -> Bool {
         size.height > size.width
     }
-
+    
     // How much of the key height to take up with label
     func relativeFontSize(in containerSize: CGSize) -> CGFloat {
         minDimension(containerSize) * 0.333
     }
-
+    
     let relativeTextPadding = 0.05
-
+    
     func relativeCornerRadius(in containerSize: CGSize) -> CGFloat {
         minDimension(containerSize) * 0.125
     }
-
+    
     func topPadding(_ size: CGSize) -> CGFloat {
         flatTop && alignment == .bottom ? relativeCornerRadius(in: size) : 0
     }
-
+    
     func leadingPadding(_ size: CGSize) -> CGFloat {
         flatTop && alignment == .trailing ? relativeCornerRadius(in: size) : 0
     }
-
+    
     func negativeTopPadding(_ size: CGSize) -> CGFloat {
         flatTop && alignment == .bottom ? -relativeCornerRadius(in: size) : 0.5
     }
-
+    
     func negativeLeadingPadding(_ size: CGSize) -> CGFloat {
         flatTop && alignment == .trailing ? -relativeCornerRadius(in: size) : 0.5
     }
-
+    
     func classicalDescription() -> String {
         switch self.pitchClass {
         case 0:
@@ -297,7 +304,7 @@ public struct IntervallicKey: View {
         default: return ""
         }
     }
-
+    
     func interval() -> String {
         
         switch self.col {
@@ -378,86 +385,101 @@ public struct IntervallicKey: View {
         default: return ""
         }
     }
-
+    
     public var body: some View {
         
-        GeometryReader { proxy in
-            ZStack {
-                Rectangle().foregroundColor(.white)
-                    .padding(.top, topPadding(proxy.size))
-                
-                    .padding(.leading, leadingPadding(proxy.size))
-                    .cornerRadius(relativeCornerRadius(in: proxy.size))
-                    .padding(.top, negativeTopPadding(proxy.size))
-                    .padding(.leading, negativeLeadingPadding(proxy.size))
-                    .padding(.trailing, 0.5)
-                ZStack(alignment: alignment) {
-                    Rectangle().foregroundColor(keyColor)
+        if (self.showIntervals) {
+            GeometryReader { proxy in
+                ZStack {
+                    Rectangle()
+                        .foregroundColor(.clear)
+                    HStack {
+                        Spacer()
+                        Text(interval())
+                            .font(.custom("Monaco", size: 20))
+                            .foregroundColor(self.iconColor)
+                            .scaledToFit()
+                            .minimumScaleFactor(0.01)
+                            .lineLimit(1)
+                        Spacer()
+                    }
+                }
+            }
+        } else {
+            GeometryReader { proxy in
+                ZStack {
+                    Rectangle().foregroundColor(.white)
                         .padding(.top, topPadding(proxy.size))
+                    
                         .padding(.leading, leadingPadding(proxy.size))
                         .cornerRadius(relativeCornerRadius(in: proxy.size))
                         .padding(.top, negativeTopPadding(proxy.size))
                         .padding(.leading, negativeLeadingPadding(proxy.size))
                         .padding(.trailing, 0.5)
-                    VStack {
-                        if (self.labelType == .symbol) {
-                            ZStack {
-                                HStack(alignment: .center) {
-                                    if self.intervalType == .perfect {
-                                        Home()
-                                            .stroke(self.iconColor, lineWidth: 2)
-                                            .aspectRatio(1.0, contentMode: .fit)
-                                            .frame(width: proxy.size.width*0.3)
-                                    } else if self.intervalType == .consonant {
-                                        Diamond()
-                                            .foregroundColor(self.iconColor)
-                                            .aspectRatio(1.0, contentMode: .fit)
-                                            .frame(width: proxy.size.width*0.25)
-                                    } else if self.intervalType == .dissonant {
-                                        Circle()
-                                            .foregroundColor(self.iconColor)
-                                            .frame(width: proxy.size.width*0.2)
+                    ZStack(alignment: alignment) {
+                        Rectangle().foregroundColor(keyColor)
+                            .padding(.top, topPadding(proxy.size))
+                            .padding(.leading, leadingPadding(proxy.size))
+                            .cornerRadius(relativeCornerRadius(in: proxy.size))
+                            .padding(.top, negativeTopPadding(proxy.size))
+                            .padding(.leading, negativeLeadingPadding(proxy.size))
+                            .padding(.trailing, 0.5)
+                        VStack {
+                            if (self.labelType == .symbol) {
+                                ZStack {
+                                    HStack(alignment: .center) {
+                                        if self.intervalType == .perfect {
+                                            Home()
+                                                .stroke(self.iconColor, lineWidth: 2)
+                                                .aspectRatio(1.0, contentMode: .fit)
+                                                .frame(width: proxy.size.width*0.3)
+                                        } else if self.intervalType == .consonant {
+                                            Diamond()
+                                                .foregroundColor(self.iconColor)
+                                                .aspectRatio(1.0, contentMode: .fit)
+                                                .frame(width: proxy.size.width*0.25)
+                                        } else if self.intervalType == .dissonant {
+                                            Circle()
+                                                .foregroundColor(self.iconColor)
+                                                .frame(width: proxy.size.width*0.2)
+                                        }
                                     }
                                 }
-                                if (self.showIntervals && self.row == 0) {
-                                    VStack {
-                                        Spacer()
-                                        Text(interval())
-                                            .font(.custom("Monaco", size: 15))
-                                            .foregroundColor(self.iconColor)
+                            } else if (self.labelType == .text) {
+                                VStack {
+                                    
+                                    if showClassicalSelector {
+                                        Text(classicalDescription())
+                                            .font(.title2)
+                                            .scaledToFit()
+                                            .minimumScaleFactor(0.01)
+                                            .lineLimit(1)
                                     }
-                                    .padding(.bottom, 10)
+                                    if showHomeySelector {
+                                        Text(homeyDescription())
+                                            .font(.custom("Monaco", size: 20))
+                                            .scaledToFit()
+                                            .minimumScaleFactor(0.01)
+                                            .textCase(.uppercase)
+                                            .lineLimit(1)
+                                    }
                                 }
+                                .foregroundColor(self.iconColor)
+                                .scaledToFit()
+                                .minimumScaleFactor(0.01)
+                                .lineLimit(1)
+                                .padding(3)
                             }
-                        } else if (self.labelType == .text) {
-                            VStack {
-                                if showClassicalSelector {
-                                    Text(classicalDescription())
-                                        .font(.headline)
-                                        .lineLimit(1)
-                                }
-                                if showHomeySelector {
-                                    Text(homeyDescription())
-                                        .font(.custom("Monaco", size: 15))
-                                        .textCase(.uppercase)
-                                        .lineLimit(1)
-                                }
-                            }
-                            .foregroundColor(self.iconColor)
-                            .scaledToFit()
-                            .minimumScaleFactor(0.01)
-                            .lineLimit(1)
-                            .padding(3)
                         }
                     }
+                    .brightness((((isActivated || isActivatedExternally) && !showIntervals) && self.labelType == .symbol) ? -0.05 : 0.0)
+                    .mask(
+                        RadialGradient(colors: [.black.opacity(homeKey ? (((isActivated || isActivatedExternally) && self.labelType == .symbol) ? 0.2: 0.75) : 0.95), .black],
+                                       center: (isActivated || isActivatedExternally && self.labelType == .symbol) ? .top : .bottom,
+                                       startRadius: 0,
+                                       endRadius: proxy.size.height * 0.5)
+                    )
                 }
-                .brightness(((isActivated || isActivatedExternally) && self.labelType == .symbol) ? -0.05 : 0.0)
-                .mask(
-                    RadialGradient(colors: [.black.opacity(homeKey ? (((isActivated || isActivatedExternally) && self.labelType == .symbol) ? 0.2: 0.75) : 0.95), .black],
-                                   center: (isActivated || isActivatedExternally && self.labelType == .symbol) ? .top : .bottom,
-                                   startRadius: 0,
-                                   endRadius: proxy.size.height * 0.5)
-                )
             }
         }
     }
