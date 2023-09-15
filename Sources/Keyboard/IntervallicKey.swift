@@ -35,6 +35,8 @@ public struct IntervallicKey: View {
     ///   - isActivatedExternally: Usually used for representing incoming MIDI
     public init(pitch: Pitch,
                 labelType: LabelType,
+                showClassicalSelector: Bool,
+                showHomeySelector: Bool,
                 tonicPitchClass: Int,
                 isActivated: Bool,
                 tonicColor: Color,
@@ -56,6 +58,8 @@ public struct IntervallicKey: View {
         self.alignment = alignment
         self.isActivatedExternally = isActivatedExternally
         self.pitchClass = pitch.intValue % 12
+        self.showClassicalSelector = showClassicalSelector
+        self.showHomeySelector = showHomeySelector
         
         switch (pitch.intValue - tonicPitchClass) % 12 {
         case 0:
@@ -103,6 +107,8 @@ public struct IntervallicKey: View {
     var homeIcon: Bool
     let pitchClass: Int
     let homeKey: Bool
+    let showHomeySelector: Bool
+    let showClassicalSelector: Bool
     
     func minDimension(_ size: CGSize) -> CGFloat {
         return min(size.width, size.height)
@@ -139,7 +145,7 @@ public struct IntervallicKey: View {
         flatTop && alignment == .trailing ? -relativeCornerRadius(in: size) : 0.5
     }
 
-    func enharmonicDescription(_ pitchClass: Int) -> String {
+    func classicalDescription(_ pitchClass: Int) -> String {
         switch pitchClass {
         case 0:
             return NoteClass.C.description
@@ -166,6 +172,36 @@ public struct IntervallicKey: View {
         case 11:
             return NoteClass.B.description
         default: return NoteClass.C.description
+        }
+    }
+    
+    func homeyDescription(_ pitchClass: Int) -> String {
+        switch pitchClass {
+        case 0:
+            return "Aug"
+        case 1:
+            return "Sep"
+        case 2:
+            return "Oct"
+        case 3:
+            return "Nov"
+        case 4:
+            return "Dec"
+        case 5:
+            return "Jan"
+        case 6:
+            return "Feb"
+        case 7:
+            return "Mar"
+        case 8:
+            return "Apr"
+        case 9:
+            return "May"
+        case 10:
+            return "Jun"
+        case 11:
+            return "Jul"
+        default: return ""
         }
     }
     
@@ -200,13 +236,24 @@ public struct IntervallicKey: View {
                                 .frame(width: proxy.size.width*0.2, height: proxy.size.height*0.2)
                         }
                     } else if (self.labelType == .text) {
-                        Text(enharmonicDescription(self.pitchClass))
-                            .foregroundColor(self.iconColor)
-                            .font(.headline)
-                            .scaledToFit()
-                            .minimumScaleFactor(0.01)
-                            .lineLimit(1)
-                            .padding(3)
+                        VStack {
+                            if showClassicalSelector {
+                                Text(classicalDescription(self.pitchClass))
+                                    .font(.headline)
+                                    .lineLimit(1)
+                            }
+                            if showHomeySelector {
+                                Text(homeyDescription(self.pitchClass))
+                                    .font(.custom("Monaco", size: 15))
+                                    .textCase(.uppercase)
+                                    .lineLimit(1)
+                            }
+                        }
+                        .foregroundColor(self.iconColor)
+                        .scaledToFit()
+                        .minimumScaleFactor(0.01)
+                        .lineLimit(1)
+                        .padding(3)
                     }
                 }
                 .brightness((isActivated || isActivatedExternally) && self.labelType == .symbol ? -0.05 : 0.0)
@@ -219,22 +266,4 @@ public struct IntervallicKey: View {
             }
         }
     }
-}
-
-struct IntervallicKey_Previews: PreviewProvider {
-    static var previews: some View {
-        ZStack {
-            Color.black
-            IntervallicKey(pitch: Pitch(64), labelType: .symbol, tonicPitchClass: 0, isActivated: false, tonicColor: Color(red: 102 / 255, green: 68 / 255, blue: 51 / 255),
-                           perfectColor: Color(red: 243 / 255, green: 221 / 255, blue: 171 / 255),
-                           majorColor: Color(red: 255 / 255, green: 176 / 255, blue: 0 / 255),
-                           minorColor: Color(red: 138 / 255, green: 197 / 255, blue: 320 / 255),
-                           tritoneColor: Color(red: 255 / 255, green: 85 / 255, blue: 0 / 255),
-                           keyColor: Color(red: 102 / 255, green: 68 / 255, blue: 51 / 255),
-                           tonicKeyColor: Color(red: 243 / 255, green: 221 / 255, blue: 171 / 255)
-            )
-            .frame(width: 40, height: 160)
-        }
-    }
-        
 }

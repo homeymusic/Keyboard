@@ -21,7 +21,6 @@ struct Dualistic<Content>: View where Content: View {
     
     var body: some View {
         let middleOctave : Int = Int(ceil(Double((octaveCount-1)/2)) * 12)
-        let _ = print("middleOctave \(middleOctave)")
         let middleTonic : Int = initialC + tonicPitchClass - middleOctave
         
         let extraKeysPerSide : Int = Int(floor(CGFloat(keysPerRow - 13) / 2))
