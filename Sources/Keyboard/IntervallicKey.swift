@@ -57,6 +57,7 @@ public struct IntervallicKey: View {
                 showHomeySelector: Bool,
                 showPianoSelector: Bool,
                 showIntervals: Bool,
+                initialC: Int,
                 tonicPitchClass: Int,
                 isActivated: Bool,
                 tonicColor: Color,
@@ -82,6 +83,7 @@ public struct IntervallicKey: View {
         self.showHomeySelector = showHomeySelector
         self.showPianoSelector = showPianoSelector
         self.showIntervals = showIntervals
+        self.initialC = initialC
 
         if showPianoSelector {
             let homeyGray: Color = Color(red: 96/255, green: 96/255, blue: 96/255)
@@ -190,6 +192,8 @@ public struct IntervallicKey: View {
     let showHomeySelector: Bool
     let showPianoSelector: Bool
     let showIntervals: Bool
+    let initialC: Int
+    public var inPrimaryZone: Bool = false
     
     func minDimension(_ size: CGSize) -> CGFloat {
         return min(size.width, size.height)
@@ -289,7 +293,7 @@ public struct IntervallicKey: View {
 
     func interval() -> String {
         
-        switch (pitch.intValue - tonicPitchClass) % 12 {
+        switch (pitch.intValue - initialC - tonicPitchClass) {
         case 0:
             return "P1"
         case 1:
@@ -316,6 +320,30 @@ public struct IntervallicKey: View {
             return "M7"
         case 12:
             return "P8"
+            //        case 13:
+            //            return "m9"
+            //        case 14:
+            //            return "M9"
+            //        case 15:
+            //            return "m10"
+            //        case 16:
+            //            return "M10"
+            //        case 17:
+            //            return "P11"
+            //        case 18:
+            //            return "tt"
+            //        case 19:
+            //            return "P12"
+            //        case 20:
+            //            return "m13"
+            //        case 21:
+            //            return "M13"
+            //        case 22:
+            //            return "m14"
+            //        case 23:
+            //            return "M12"
+            //        case 24:
+            //            return "P15"
         default: return ""
         }
     }

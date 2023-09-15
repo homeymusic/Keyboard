@@ -67,12 +67,13 @@ public struct Keyboard<Content>: View where Content: View {
                                                   initialSpacerRatio: initialSpacerRatio,
                                                   spacerRatio: spacerRatio,
                                                   relativeBlackKeyWidth: relativeBlackKeyWidth))
-            case let .dualistic(octaveCount, keysPerRow, tonicPitchClass):
+            case let .dualistic(octaveCount, keysPerRow, tonicPitchClass, initialC):
                 Dualistic(content: content,
                           model: model,
                           octaveCount: octaveCount,
                           keysPerRow: keysPerRow,
-                          tonicPitchClass: tonicPitchClass)
+                          tonicPitchClass: tonicPitchClass,
+                          initialC: initialC)
             }
 
             if !latching {
