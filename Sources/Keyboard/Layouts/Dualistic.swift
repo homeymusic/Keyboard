@@ -27,9 +27,15 @@ struct Dualistic<Content>: View where Content: View {
             ForEach((-extraRowsPerSide...extraRowsPerSide).reversed(), id: \.self) { row in
                 HStack(spacing: 0) {
                     ForEach(-extraColsPerSide...(12+extraColsPerSide), id: \.self) { col in
-                        KeyContainer(model: model,
-                                     pitch: Pitch(intValue: safeMIDI(row * 12 + col + tonicPitch)),
-                                     content: content)
+                        let midi = safeMIDI(row * 12 + col + tonicPitch)
+                        if (midi >= 20 && midi <= 109) {
+                            KeyContainer(model: model,
+                                         pitch: Pitch(intValue: midi),
+                                         content: content)
+                        } else {
+                            Rectangle()
+                                .fill(.clear)
+                        }
                     }
                 }
             }
