@@ -4,7 +4,7 @@ import SwiftUI
 import Tonic
 
 struct Piano<Content>: View where Content: View {
-    let content: (Pitch, Bool) -> Content
+    let content: (Pitch, Bool, Int, Int) -> Content
     let keyboard: KeyboardModel
     let spacer: PianoSpacer
 
@@ -13,7 +13,7 @@ struct Piano<Content>: View where Content: View {
             ZStack(alignment: .topLeading) {
                 HStack(spacing: 0) {
                     ForEach(spacer.whiteKeys, id: \.self) { pitch in
-                        KeyContainer(model: keyboard, pitch: pitch, content: content)
+                        KeyContainer(model: keyboard, pitch: pitch, row: 0, col: 0, content: content)
                             .frame(width: spacer.whiteKeyWidth(geo.size.width))
                     }
                 }
@@ -30,6 +30,8 @@ struct Piano<Content>: View where Content: View {
                             if spacer.isBlackKey(Pitch(intValue: pitch.intValue)) {
                                 KeyContainer(model: keyboard,
                                              pitch: Pitch(intValue: pitch.intValue),
+                                             row: 0,
+                                             col: 0,
                                              zIndex: 1,
                                              content: content)
                                     .frame(width: spacer.blackKeyWidth(geo.size.width))

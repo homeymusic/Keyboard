@@ -52,6 +52,9 @@ public struct IntervallicKey: View {
     ///   - color: Color of the activated key
     ///   - isActivatedExternally: Usually used for representing incoming MIDI
     public init(pitch: Pitch,
+                isActivated: Bool,
+                row: Int,
+                col: Int,
                 labelType: LabelType,
                 showClassicalSelector: Bool,
                 showHomeySelector: Bool,
@@ -59,7 +62,6 @@ public struct IntervallicKey: View {
                 showIntervals: Bool,
                 initialC: Int,
                 tonicPitchClass: Int,
-                isActivated: Bool,
                 tonicColor: Color,
                 perfectColor: Color,
                 majorColor: Color,
@@ -84,7 +86,9 @@ public struct IntervallicKey: View {
         self.showPianoSelector = showPianoSelector
         self.showIntervals = showIntervals
         self.initialC = initialC
-
+        self.row = row
+        self.col = col
+        
         if showPianoSelector {
             let homeyGray: Color = Color(red: 96/255, green: 96/255, blue: 96/255)
 
@@ -193,6 +197,9 @@ public struct IntervallicKey: View {
     let showPianoSelector: Bool
     let showIntervals: Bool
     let initialC: Int
+    let row: Int
+    let col: Int
+    
     public var inPrimaryZone: Bool = false
     
     func minDimension(_ size: CGSize) -> CGFloat {
@@ -293,7 +300,31 @@ public struct IntervallicKey: View {
 
     func interval() -> String {
         
-        switch (pitch.intValue - initialC - tonicPitchClass) {
+        switch self.col {
+        case -12:
+            return "P8'"
+        case -11:
+            return "m2'"
+        case -10:
+            return "M2'"
+        case -9:
+            return "m3'"
+        case -8:
+            return "M3'"
+        case -7:
+            return "P4'"
+        case -6:
+            return "tt'"
+        case -5:
+            return "P5'"
+        case -4:
+            return "m6'"
+        case -3:
+            return "M6'"
+        case -2:
+            return "m7'"
+        case -1:
+            return "M7'"
         case 0:
             return "P1"
         case 1:
@@ -320,30 +351,30 @@ public struct IntervallicKey: View {
             return "M7"
         case 12:
             return "P8"
-            //        case 13:
-            //            return "m9"
-            //        case 14:
-            //            return "M9"
-            //        case 15:
-            //            return "m10"
-            //        case 16:
-            //            return "M10"
-            //        case 17:
-            //            return "P11"
-            //        case 18:
-            //            return "tt"
-            //        case 19:
-            //            return "P12"
-            //        case 20:
-            //            return "m13"
-            //        case 21:
-            //            return "M13"
-            //        case 22:
-            //            return "m14"
-            //        case 23:
-            //            return "M12"
-            //        case 24:
-            //            return "P15"
+        case 13:
+            return "m9"
+        case 14:
+            return "M9"
+        case 15:
+            return "m10"
+        case 16:
+            return "M10"
+        case 17:
+            return "P11"
+        case 18:
+            return "tt"
+        case 19:
+            return "P12"
+        case 20:
+            return "m13"
+        case 21:
+            return "M13"
+        case 22:
+            return "m14"
+        case 23:
+            return "M12"
+        case 24:
+            return "P15"
         default: return ""
         }
     }
@@ -370,26 +401,33 @@ public struct IntervallicKey: View {
                         .padding(.trailing, 0.5)
                     VStack {
                         if (self.labelType == .symbol) {
-                            
-                            if self.intervalType == .perfect {
-                                Home()
-                                    .stroke(self.iconColor, lineWidth: 2)
-                                    .aspectRatio(1.0, contentMode: .fit)
-                                    .frame(width: proxy.size.width*0.3)
-                            } else if self.intervalType == .consonant {
-                                Diamond()
-                                    .foregroundColor(self.iconColor)
-                                    .aspectRatio(1.0, contentMode: .fit)
-                                    .frame(width: proxy.size.width*0.25)
-                            } else if self.intervalType == .dissonant {
-                                Circle()
-                                    .foregroundColor(self.iconColor)
-                                    .frame(width: proxy.size.width*0.2)
-                            }
-                            if (self.showIntervals) {
-                                Text(interval())
-                                    .font(.custom("Monaco", size: 15))
-                                    .foregroundColor(self.iconColor)
+                            ZStack {
+                                HStack(alignment: .center) {
+                                    if self.intervalType == .perfect {
+                                        Home()
+                                            .stroke(self.iconColor, lineWidth: 2)
+                                            .aspectRatio(1.0, contentMode: .fit)
+                                            .frame(width: proxy.size.width*0.3)
+                                    } else if self.intervalType == .consonant {
+                                        Diamond()
+                                            .foregroundColor(self.iconColor)
+                                            .aspectRatio(1.0, contentMode: .fit)
+                                            .frame(width: proxy.size.width*0.25)
+                                    } else if self.intervalType == .dissonant {
+                                        Circle()
+                                            .foregroundColor(self.iconColor)
+                                            .frame(width: proxy.size.width*0.2)
+                                    }
+                                }
+                                if (self.showIntervals && self.row == 0) {
+                                    VStack {
+                                        Spacer()
+                                        Text(interval())
+                                            .font(.custom("Monaco", size: 15))
+                                            .foregroundColor(self.iconColor)
+                                    }
+                                    .padding(.bottom, 10)
+                                }
                             }
                         } else if (self.labelType == .text) {
                             VStack {

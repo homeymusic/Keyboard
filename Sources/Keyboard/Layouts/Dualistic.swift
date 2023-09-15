@@ -11,7 +11,7 @@ func safeMIDI(_ p: Int) -> Int {
 }
 
 struct Dualistic<Content>: View where Content: View {
-    let content: (Pitch, Bool) -> Content
+    let content: (Pitch, Bool, Int, Int) -> Content
     var model: KeyboardModel
     var octaveCount: Int
     var keysPerRow: Int
@@ -31,6 +31,8 @@ struct Dualistic<Content>: View where Content: View {
                         if (midi >= 20 && midi <= 109) {
                             KeyContainer(model: model,
                                          pitch: Pitch(intValue: midi),
+                                         row: row,
+                                         col: col,
                                          content: content)
                         } else {
                             Rectangle()

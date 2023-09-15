@@ -14,6 +14,8 @@ public struct KeyboardKey: View {
     ///   - isActivatedExternally: Usually used for representing incoming MIDI
     public init(pitch: Pitch,
                 isActivated: Bool,
+                row: Int,
+                col: Int,
                 text: String = "unset",
                 whiteKeyColor: Color = .white,
                 blackKeyColor: Color = .black,

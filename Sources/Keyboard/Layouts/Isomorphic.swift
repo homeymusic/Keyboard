@@ -4,7 +4,7 @@ import SwiftUI
 import Tonic
 
 struct Isomorphic<Content>: View where Content: View {
-    let content: (Pitch, Bool) -> Content
+    let content: (Pitch, Bool, Int, Int) -> Content
     var model: KeyboardModel
     var pitchRange: ClosedRange<Pitch>
     var root: NoteClass
@@ -24,6 +24,8 @@ struct Isomorphic<Content>: View where Content: View {
             ForEach(pitchesToShow, id: \.self) { pitch in
                 KeyContainer(model: model,
                              pitch: pitch,
+                             row: 0,
+                             col: 0,
                              content: content)
             }
         }

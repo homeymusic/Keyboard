@@ -4,7 +4,7 @@ import SwiftUI
 import Tonic
 
 struct Guitar<Content>: View where Content: View {
-    let content: (Pitch, Bool) -> Content
+    let content: (Pitch, Bool, Int, Int) -> Content
     var model: KeyboardModel
     var openPitches: [Pitch]
     var fretCount: Int
@@ -19,6 +19,8 @@ struct Guitar<Content>: View where Content: View {
                     ForEach(0 ..< fretCount + 1, id: \.self) { fret in
                         KeyContainer(model: model,
                                      pitch: Pitch(intValue: openPitches[string].intValue + fret),
+                                     row: 0,
+                                     col: 0,
                                      content: content)
                     }
                 }

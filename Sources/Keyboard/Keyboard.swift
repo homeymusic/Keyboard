@@ -5,7 +5,7 @@ import SwiftUI
 
 /// Touch-oriented musical keyboard
 public struct Keyboard<Content>: View where Content: View {
-    let content: (Pitch, Bool) -> Content
+    let content: (Pitch, Bool, Int, Int) -> Content
 
     @StateObject var model: KeyboardModel = .init()
 
@@ -25,7 +25,7 @@ public struct Keyboard<Content>: View where Content: View {
                 latching: Bool = false,
                 noteOn: @escaping (Pitch, CGPoint) -> Void = { _, _ in },
                 noteOff: @escaping (Pitch) -> Void = { _ in },
-                @ViewBuilder content: @escaping (Pitch, Bool) -> Content)
+                @ViewBuilder content: @escaping (Pitch, Bool, Int, Int) -> Content)
     {
         self.latching = latching
         self.layout = layout
@@ -130,6 +130,8 @@ public extension Keyboard where Content == KeyboardKey {
             KeyboardKey(
                 pitch: $0,
                 isActivated: $1,
+                row: $2,
+                col: $3,
                 flatTop: flatTop,
                 alignment: alignment
             )
