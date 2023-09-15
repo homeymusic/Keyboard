@@ -256,10 +256,10 @@ public struct IntervallicKey: View {
                         .padding(3)
                     }
                 }
-                .brightness((isActivated || isActivatedExternally) && self.labelType == .symbol ? -0.05 : 0.0)
+                .brightness(((isActivated || isActivatedExternally) && self.labelType == .symbol) ? -0.05 : 0.0)
                 .mask(
-                    RadialGradient(colors: [.black.opacity(homeKey ? (isActivated ? 0.2: 0.75) : (isActivated ? 0.85: 0.95)), .black],
-                                   center: isActivated ? .top : .bottom,
+                    RadialGradient(colors: [.black.opacity(homeKey ? (((isActivated || isActivatedExternally) && self.labelType == .symbol) ? 0.2: 0.75) : ((isActivated || isActivatedExternally) ? 0.85: 0.95)), .black],
+                                   center: (isActivated || isActivatedExternally && self.labelType == .symbol) ? .top : .bottom,
                                    startRadius: 0,
                                    endRadius: proxy.size.height * 0.5)
                 )
