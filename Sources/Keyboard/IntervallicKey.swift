@@ -8,6 +8,12 @@ public enum LabelType {
     case text
 }
 
+public enum IntervalType {
+    case perfect
+    case consonant
+    case dissonant
+}
+
 struct Home: Shape {
     func path(in rect: CGRect) -> Path {
         Path { path in
@@ -17,6 +23,18 @@ struct Home: Shape {
             path.addLine(to: CGPoint(x: rect.midX, y: rect.minY))
             path.addLine(to: CGPoint(x: rect.maxX, y: 0.4*rect.maxY))
             path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+            path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
+        }
+    }
+}
+
+struct Diamond: Shape {
+    func path(in rect: CGRect) -> Path {
+        Path { path in
+            path.move(to: CGPoint(x: rect.midX, y: rect.maxY))
+            path.addLine(to: CGPoint(x: rect.minX, y: rect.midY))
+            path.addLine(to: CGPoint(x: rect.midX, y: rect.minY))
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
             path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
         }
     }
@@ -64,32 +82,42 @@ public struct IntervallicKey: View {
         switch (pitch.intValue - tonicPitchClass) % 12 {
         case 0:
             self.iconColor = tonicColor
-            self.homeIcon = true
+            self.intervalType = .perfect
             self.keyColor = tonicKeyColor
             self.homeKey = true
         case 5, 7:
             self.iconColor = perfectColor
-            self.homeIcon = true
+            self.intervalType = .perfect
             self.keyColor = keyColor
             self.homeKey = false
-        case 2, 4, 9, 11:
+        case 4, 9:
             self.iconColor = majorColor
-            self.homeIcon = false
+            self.intervalType = .consonant
             self.keyColor = keyColor
             self.homeKey = false
-        case 1, 3, 8, 10:
+        case 2, 11:
+            self.iconColor = majorColor
+            self.intervalType = .dissonant
+            self.keyColor = keyColor
+            self.homeKey = false
+        case 3, 8:
             self.iconColor = minorColor
-            self.homeIcon = false
+            self.intervalType = .consonant
+            self.keyColor = keyColor
+            self.homeKey = false
+        case 1, 10:
+            self.iconColor = minorColor
+            self.intervalType = .dissonant
             self.keyColor = keyColor
             self.homeKey = false
         case 6:
             self.iconColor = tritoneColor
-            self.homeIcon = false
+            self.intervalType = .dissonant
             self.keyColor = keyColor
             self.homeKey = false
         default:
             self.iconColor = Color.black
-            self.homeIcon = false
+            self.intervalType = .dissonant
             self.keyColor = Color.white
             self.homeKey = false
         }
@@ -104,7 +132,7 @@ public struct IntervallicKey: View {
     var isActivatedExternally: Bool
     var keyColor: Color
     var iconColor: Color
-    var homeIcon: Bool
+    var intervalType: IntervalType
     let pitchClass: Int
     let homeKey: Bool
     let showHomeySelector: Bool
@@ -225,15 +253,21 @@ public struct IntervallicKey: View {
                         .padding(.leading, negativeLeadingPadding(proxy.size))
                         .padding(.trailing, 0.5)
                     if (self.labelType == .symbol) {
-                        if (self.homeIcon) {
+                        
+                        if self.intervalType == .perfect {
                             Home()
                                 .stroke(self.iconColor, lineWidth: 2)
                                 .aspectRatio(1.0, contentMode: .fit)
-                                .frame(width: proxy.size.width*0.3, height: proxy.size.height*0.3)
-                        } else {
+                                .frame(width: proxy.size.width*0.3)
+                        } else if self.intervalType == .consonant {
+                             Diamond()
+                                .foregroundColor(self.iconColor)
+                                .aspectRatio(1.0, contentMode: .fit)
+                                .frame(width: proxy.size.width*0.25)
+                        } else if self.intervalType == .dissonant {
                             Circle()
                                 .foregroundColor(self.iconColor)
-                                .frame(width: proxy.size.width*0.2, height: proxy.size.height*0.2)
+                                .frame(width: proxy.size.width*0.2)
                         }
                     } else if (self.labelType == .text) {
                         VStack {
