@@ -14,7 +14,7 @@ public enum IntervalType {
     case dissonant
 }
 
-struct Home: Shape {
+struct NitterHouse: Shape {
     func path(in rect: CGRect) -> Path {
         Path { path in
             path.move(to: CGPoint(x: rect.midX, y: rect.maxY))
@@ -429,7 +429,7 @@ public struct IntervallicKey: View {
                                 ZStack {
                                     HStack(alignment: .center) {
                                         if self.intervalType == .perfect {
-                                            Home()
+                                            NitterHouse()
                                                 .stroke(self.iconColor, lineWidth: 2)
                                                 .aspectRatio(1.0, contentMode: .fit)
                                                 .frame(width: proxy.size.width*0.3)
@@ -450,7 +450,7 @@ public struct IntervallicKey: View {
                                     
                                     if showClassicalSelector {
                                         Text(classicalDescription())
-                                            .font(.title2)
+                                            .font(.headline)
                                             .scaledToFit()
                                             .minimumScaleFactor(0.01)
                                             .lineLimit(1)
