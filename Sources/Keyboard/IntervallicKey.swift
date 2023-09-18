@@ -123,7 +123,6 @@ public struct IntervallicKey: View {
             self.keyColor = .white
             self.homeKey = false
         }
-        
     }
     
     var pitch: Pitch
