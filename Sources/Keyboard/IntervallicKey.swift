@@ -57,7 +57,7 @@ public struct IntervallicKey: View {
                 col: Int,
                 labelType: LabelType,
                 showClassicalSelector: Bool,
-                showHomeySelector: Bool,
+                showMonthsSelector: Bool,
                 showPianoSelector: Bool,
                 showIntervals: Bool,
                 initialC: Int,
@@ -82,7 +82,7 @@ public struct IntervallicKey: View {
         self.isActivatedExternally = isActivatedExternally
         self.pitchClass = pitch.intValue % 12
         self.showClassicalSelector = showClassicalSelector
-        self.showHomeySelector = showHomeySelector
+        self.showMonthsSelector = showMonthsSelector
         self.showPianoSelector = showPianoSelector
         self.showIntervals = showIntervals
         self.initialC = initialC
@@ -200,7 +200,7 @@ public struct IntervallicKey: View {
     let pitchClass: Int
     let homeKey: Bool
     let showClassicalSelector: Bool
-    let showHomeySelector: Bool
+    let showMonthsSelector: Bool
     let showPianoSelector: Bool
     let showIntervals: Bool
     let initialC: Int
@@ -275,7 +275,6 @@ public struct IntervallicKey: View {
     }
     
     func homeyDescription() -> String {
-        
         switch self.pitchClass {
         case 0:
             return "Aug"
@@ -455,7 +454,7 @@ public struct IntervallicKey: View {
                                             .minimumScaleFactor(0.01)
                                             .lineLimit(1)
                                     }
-                                    if showHomeySelector {
+                                    if showMonthsSelector {
                                         Text(homeyDescription())
                                             .font(.custom("Monaco", size: 20))
                                             .scaledToFit()
