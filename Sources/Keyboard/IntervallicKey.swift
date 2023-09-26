@@ -222,9 +222,9 @@ public struct IntervallicKey: View {
                         }
                     }
                 }
-                .brightness((((isActivated || isActivatedExternally)) && self.labelType == .symbol) ? -0.05 : 0.0)
+                .brightness(((isActivated || isActivatedExternally) && self.labelType == .symbol) ? (homeKey ? -0.15 : -0.05): 0)
                 .mask(
-                    RadialGradient(colors: [.black.opacity(homeKey ? (((isActivated || isActivatedExternally) && self.labelType == .symbol) ? 0.2: 0.75) : 0.95), .black],
+                    RadialGradient(colors: [.black.opacity(((isActivated || isActivatedExternally) && self.labelType == .symbol) ? (homeKey ? 0.7 : 0.9) : 0.95), .black],
                                    center: (isActivated || isActivatedExternally && self.labelType == .symbol) ? .top : .bottom,
                                    startRadius: 0,
                                    endRadius: proxy.size.height * 0.5)
