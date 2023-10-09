@@ -14,6 +14,7 @@ struct KeyRectsKey: PreferenceKey {
 
 struct KeyRectInfo: Equatable {
     var rect: CGRect
+    var keyboardCell: KeyboardCell
     var pitch: Pitch
     var zIndex: Int = 0
 }

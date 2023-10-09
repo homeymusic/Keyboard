@@ -53,8 +53,6 @@ public struct IntervallicKey: View {
     ///   - isActivatedExternally: Usually used for representing incoming MIDI
     public init(pitch: Pitch,
                 isActivated: Bool,
-                row: Int,
-                col: Int,
                 labelType: LabelType,
                 initialC: Int,
                 tonicPitchClass: Int,
@@ -78,8 +76,6 @@ public struct IntervallicKey: View {
         self.isActivatedExternally = isActivatedExternally
         self.pitchClass = pitch.intValue % 12
         self.initialC = initialC
-        self.row = row
-        self.col = col
         
         switch (pitch.intValue - tonicPitchClass) % 12 {
         case 0:
@@ -138,8 +134,6 @@ public struct IntervallicKey: View {
     let pitchClass: Int
     let homeKey: Bool
     let initialC: Int
-    let row: Int
-    let col: Int
     
     public var inPrimaryZone: Bool = false
     

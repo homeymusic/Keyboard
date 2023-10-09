@@ -12,10 +12,9 @@ public struct KeyboardKey: View {
     ///   - text: Label on the key
     ///   - color: Color of the activated key
     ///   - isActivatedExternally: Usually used for representing incoming MIDI
-    public init(pitch: Pitch,
+    public init(keyboardCell: KeyboardCell,
+                pitch: Pitch,
                 isActivated: Bool,
-                row: Int,
-                col: Int,
                 text: String = "unset",
                 whiteKeyColor: Color = .white,
                 blackKeyColor: Color = .black,
@@ -24,6 +23,7 @@ public struct KeyboardKey: View {
                 alignment: Alignment = .bottom,
                 isActivatedExternally: Bool = false)
     {
+        self.keyboardCell = keyboardCell
         self.pitch = pitch
         self.isActivated = isActivated
         if text == "unset" {
@@ -45,6 +45,7 @@ public struct KeyboardKey: View {
         self.isActivatedExternally = isActivatedExternally
     }
 
+    var keyboardCell: KeyboardCell
     var pitch: Pitch
     var isActivated: Bool
     var whiteKeyColor: Color

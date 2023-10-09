@@ -6,33 +6,30 @@ import Tonic
 /// This handles the interaction for key, so the user can provide their own
 /// visual representation.
 struct KeyContainer<Content: View>: View {
-    let content: (Pitch, Bool, Int, Int) -> Content
+    let content: (KeyboardCell, Pitch, Bool) -> Content
 
     var pitch: Pitch
     @ObservedObject var model: KeyboardModel
     
-    let row: Int
-    let col: Int
+    let keyboardCell: KeyboardCell
     
     var zIndex: Int
 
     init(model: KeyboardModel,
+         keyboardCell: KeyboardCell,
          pitch: Pitch,
-         row: Int,
-         col: Int,
          zIndex: Int = 0,
-         @ViewBuilder content: @escaping (Pitch, Bool, Int, Int) -> Content)
+         @ViewBuilder content: @escaping (KeyboardCell, Pitch, Bool) -> Content)
     {
         self.model = model
         self.pitch = pitch
         self.zIndex = zIndex
         self.content = content
-        self.row = row
-        self.col = col
+        self.keyboardCell = keyboardCell
     }
 
     func rect(rect: CGRect) -> some View {
-        content(pitch, model.touchedPitches.contains(pitch) || model.externallyActivatedPitches.contains(pitch), self.row, self.col)
+        content(keyboardCell, pitch, model.touchedPitches.contains(pitch) || model.externallyActivatedPitches.contains(pitch))
             .contentShape(Rectangle()) // Added to improve tap/click reliability
             .gesture(
                 TapGesture().onEnded { _ in
@@ -45,6 +42,7 @@ struct KeyContainer<Content: View>: View {
             )
             .preference(key: KeyRectsKey.self,
                         value: [KeyRectInfo(rect: rect,
+                                            keyboardCell: keyboardCell,
                                             pitch: pitch,
                                             zIndex: zIndex)])
     }
