@@ -51,7 +51,8 @@ public struct IntervallicKey: View {
     ///   - text: Label on the key
     ///   - color: Color of the activated key
     ///   - isActivatedExternally: Usually used for representing incoming MIDI
-    public init(pitch: Pitch,
+    public init(keyboardCell: KeyboardCell,
+                pitch: Pitch,
                 isActivated: Bool,
                 labelType: LabelType,
                 initialC: Int,
@@ -67,6 +68,7 @@ public struct IntervallicKey: View {
                 alignment: Alignment = .center,
                 isActivatedExternally: Bool = false)
     {
+        self.keyboardCell = keyboardCell
         self.pitch = pitch
         self.labelType = labelType
         self.tonicPitchClass = tonicPitchClass
@@ -74,10 +76,12 @@ public struct IntervallicKey: View {
         self.flatTop = flatTop
         self.alignment = alignment
         self.isActivatedExternally = isActivatedExternally
-        self.pitchClass = pitch.intValue % 12
+        self.pitchClass = (self.pitch.intValue - tonicPitchClass) % 12
         self.initialC = initialC
         
-        switch (pitch.intValue - tonicPitchClass) % 12 {
+        print("self.pitchClass \(self.pitchClass)")
+        
+        switch self.pitchClass {
         case 0:
             self.iconColor = tonicColor
             self.intervalType = .perfect
@@ -121,6 +125,7 @@ public struct IntervallicKey: View {
         }
     }
     
+    var keyboardCell: KeyboardCell
     var pitch: Pitch
     var labelType: LabelType
     var tonicPitchClass: Int

@@ -8,10 +8,10 @@ import Tonic
 struct KeyContainer<Content: View>: View {
     let content: (KeyboardCell, Pitch, Bool) -> Content
 
-    var pitch: Pitch
     @ObservedObject var model: KeyboardModel
     
     let keyboardCell: KeyboardCell
+    let pitch: Pitch
     
     var zIndex: Int
 
@@ -22,10 +22,11 @@ struct KeyContainer<Content: View>: View {
          @ViewBuilder content: @escaping (KeyboardCell, Pitch, Bool) -> Content)
     {
         self.model = model
+        self.keyboardCell = keyboardCell
         self.pitch = pitch
+        print("self.keyboardCell \(self.keyboardCell)")
         self.zIndex = zIndex
         self.content = content
-        self.keyboardCell = keyboardCell
     }
 
     func rect(rect: CGRect) -> some View {
