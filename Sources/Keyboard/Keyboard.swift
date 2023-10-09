@@ -21,7 +21,7 @@ public struct Keyboard<Content>: View where Content: View {
     ///   - noteOn: Closure to perform when a key is pressed
     ///   - noteOff: Closure to perform when a note ends
     ///   - content: View defining how to render a specific key
-    public init(layout: KeyboardLayout = .piano(pitchRange: Pitch(60) ... Pitch(72)),
+    public init(layout: KeyboardLayout,
                 latching: Bool = false,
                 noteOn: @escaping (Pitch, CGPoint) -> Void = { _, _ in },
                 noteOff: @escaping (Pitch) -> Void = { _ in },
@@ -38,35 +38,6 @@ public struct Keyboard<Content>: View where Content: View {
     public var body: some View {
         ZStack {
             switch layout {
-            case let .piano(pitchRange, initialSpacerRatio, spacerRatio, relativeBlackKeyWidth, relativeBlackKeyHeight):
-                Piano(content: content,
-                      keyboard: model,
-                      spacer: PianoSpacer(pitchRange: pitchRange,
-                                          initialSpacerRatio: initialSpacerRatio,
-                                          spacerRatio: spacerRatio,
-                                          relativeBlackKeyWidth: relativeBlackKeyWidth,
-                                          relativeBlackKeyHeight: relativeBlackKeyHeight))
-            case let .isomorphic(pitchRange, root, scale):
-                Isomorphic(content: content,
-                           model: model,
-                           pitchRange: pitchRange,
-                           root: root,
-                           scale: scale)
-            case let .guitar(openPitches, fretCount):
-                Guitar(content: content, model: model, openPitches: openPitches, fretCount: fretCount)
-            case let .verticalIsomorphic(pitchRange, root, scale):
-                VerticalIsomorphic(content: content,
-                                   model: model,
-                                   pitchRange: pitchRange,
-                                   root: root,
-                                   scale: scale)
-            case let .verticalPiano(pitchRange, initialSpacerRatio, spacerRatio, relativeBlackKeyWidth):
-                VerticalPiano(content: content,
-                              keyboard: model,
-                              spacer: PianoSpacer(pitchRange: pitchRange,
-                                                  initialSpacerRatio: initialSpacerRatio,
-                                                  spacerRatio: spacerRatio,
-                                                  relativeBlackKeyWidth: relativeBlackKeyWidth))
             case let .dualistic(octaveCount, keysPerRow, tonicPitchClass, initialC):
                 Dualistic(content: content,
                           model: model,
@@ -98,7 +69,7 @@ public extension Keyboard where Content == KeyboardKey {
     ///   - latching: Latched keys stay on until they are pressed again
     ///   - noteOn: Closure to perform when a key is pressed
     ///   - noteOff: Closure to perform when a note ends
-    init(layout: KeyboardLayout = .piano(pitchRange: Pitch(60) ... Pitch(72)),
+    init(layout: KeyboardLayout,
          latching: Bool = false,
          noteOn: @escaping (Pitch, CGPoint) -> Void = { _, _ in },
          noteOff: @escaping (Pitch) -> Void = { _ in })
@@ -110,19 +81,8 @@ public extension Keyboard where Content == KeyboardKey {
 
         var alignment: Alignment = .bottom
 
-        var flatTop = false
+        let flatTop = false
         switch layout {
-        case .guitar:
-            alignment = .center
-        case .isomorphic:
-            alignment = .bottom
-        case .piano:
-            flatTop = true
-        case .verticalIsomorphic:
-            alignment = .trailing
-        case .verticalPiano:
-            flatTop = true
-            alignment = .trailing
         case .dualistic:
             alignment = .bottom
         }
