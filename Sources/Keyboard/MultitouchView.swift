@@ -19,7 +19,7 @@ class MultitouchViewIOS: UIView {
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        callback(self.touches.map { $0.location(in: nil)})
+        callback(self.touches.map { $0.location(in: nil)})
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -66,7 +66,7 @@ class MultitouchViewMacOS: NSView {
     }
     
     override func mouseDragged(with event: NSEvent) {
-//        callback([flip(event.locationInWindow)])
+        callback([flip(event.locationInWindow)])
     }
     
     override func mouseUp(with event: NSEvent) {
