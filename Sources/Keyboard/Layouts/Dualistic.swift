@@ -28,7 +28,6 @@ struct Dualistic<Content>: View where Content: View {
                 HStack(spacing: 0) {
                     ForEach(-extraColsPerSide...(12+extraColsPerSide), id: \.self) { col in
                         let midi = safeMIDI(row * 12 + col + tonicPitch)
-                        let _ = print("midi: \(midi) tonicPitch: \(tonicPitch)")
                         if (midi >= 20 && midi <= 109) {
                             KeyContainer(model: model,
                                          keyboardCell: KeyboardCell(row: row, col: col, pitch: Pitch(intValue: midi)),

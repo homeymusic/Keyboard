@@ -12,10 +12,9 @@ class KeyboardModel: ObservableObject {
     var touchLocations: [CGPoint] = [] {
         didSet {
             var newKeyboardCells = Set<KeyboardCell>()
-            var newPitches = PitchSet()
+            var pressedKeyboardCells = Set<KeyboardCell>()
             for location in touchLocations {
                 var keyboardCell: KeyboardCell?
-                var pitch: Pitch?
                 var highestZindex = -1
                 var normalizedPoint = CGPoint.zero
                 for info in keyRectInfos where info.rect.contains(location) {
@@ -25,67 +24,39 @@ class KeyboardModel: ObservableObject {
                         normalizedPoint = CGPoint(x: (location.x - info.rect.minX) / info.rect.width,
                                                   y: (location.y - info.rect.minY) / info.rect.height)
                     }
-                    if pitch == nil || info.zIndex > highestZindex {
-                        pitch = info.pitch
-                    }
                 }
-                if let p = pitch {
-                    newPitches.add(p)
-                    if let k = keyboardCell {
-                        newKeyboardCells.insert(k)
-                        normalizedPoints[p.intValue] = normalizedPoint
-                    }
+                if let k = keyboardCell {
+                    newKeyboardCells.insert(k)
+                    pressedKeyboardCells.insert(k)
+                    normalizedPoints[k.pitch.intValue] = normalizedPoint
                 }
             }
             if touchedKeyboardCells != newKeyboardCells {
                 touchedKeyboardCells = newKeyboardCells
             }
-            if touchedPitches.array != newPitches.array {
-                touchedPitches = newPitches
-            }
+            print("pressedKeyboardCells", pressedKeyboardCells)
         }
     }
     
-    /// Either latched keys or keys active due to external MIDI events.
-    @Published var externallyActivatedPitches = PitchSet() {
-        willSet { triggerPitchEvents(from: externallyActivatedPitches, to: newValue) }
-    }
-    
-    func triggerPitchEvents(from oldValue: PitchSet, to newValue: PitchSet) {
-        let newPitches = newValue.subtracting(oldValue)
-        let removedPitches = oldValue.subtracting(newValue)
-
-        for pitch in removedPitches.array {
-            noteOff(pitch)
-        }
-
-        for pitch in newPitches.array {
-            noteOn(pitch, normalizedPoints[pitch.intValue])
-        }
-    }
-
-    @Published var touchedPitches = PitchSet() {
-        willSet { triggerPitchEvents(from: touchedPitches, to: newValue) }
-    }
-
     @Published var touchedKeyboardCells = Set<KeyboardCell>() {
         willSet { triggerEvents(from: touchedKeyboardCells, to: newValue) }
     }
-
+    
     /// Either latched keys or keys active due to external MIDI events.
     @Published var externallyActivatedKeyboardCells = Set<KeyboardCell>() {
         willSet { triggerEvents(from: externallyActivatedKeyboardCells, to: newValue) }
     }
-
+    
     func triggerEvents(from oldValue: Set<KeyboardCell>, to newValue: Set<KeyboardCell>) {
         let newKeyboardCells = newValue.subtracting(oldValue)
         let removedKeyboardCells = oldValue.subtracting(newValue)
-
+                
         for keyboardCell in removedKeyboardCells {
+//            print("off keyboardCell:", keyboardCell)
             noteOff(keyboardCell.pitch)
         }
-
         for keyboardCell in newKeyboardCells {
+//            print("on keyboardCell:", keyboardCell)
             noteOn(keyboardCell.pitch, normalizedPoints[keyboardCell.pitch.intValue])
         }
     }

@@ -79,8 +79,6 @@ public struct IntervallicKey: View {
         self.pitchClass = (self.pitch.intValue - tonicPitchClass) % 12
         self.initialC = initialC
         
-        print("self.pitchClass \(self.pitchClass)")
-        
         switch self.pitchClass {
         case 0:
             self.iconColor = tonicColor

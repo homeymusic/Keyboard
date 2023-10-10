@@ -24,20 +24,25 @@ struct KeyContainer<Content: View>: View {
         self.model = model
         self.keyboardCell = keyboardCell
         self.pitch = pitch
-        print("self.keyboardCell \(self.keyboardCell)")
         self.zIndex = zIndex
         self.content = content
     }
 
     func rect(rect: CGRect) -> some View {
-        content(keyboardCell, pitch, model.touchedPitches.contains(pitch) || model.externallyActivatedPitches.contains(pitch))
+        let isPitchOn = model.touchedKeyboardCells.map {
+            return $0.pitch
+        }.contains(pitch)
+        let isExternalPitchOn = model.externallyActivatedKeyboardCells.map {
+            return $0.pitch
+        }.contains(pitch)
+        return content(keyboardCell, pitch, isPitchOn || isExternalPitchOn)
             .contentShape(Rectangle()) // Added to improve tap/click reliability
             .gesture(
                 TapGesture().onEnded { _ in
-                    if model.externallyActivatedPitches.contains(pitch) {
-                        model.externallyActivatedPitches.remove(pitch)
+                    if model.externallyActivatedKeyboardCells.contains(keyboardCell) {
+                        model.externallyActivatedKeyboardCells.remove(keyboardCell)
                     } else {
-                        model.externallyActivatedPitches.add(pitch)
+                        model.externallyActivatedKeyboardCells.insert(keyboardCell)
                     }
                 }
             )
