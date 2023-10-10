@@ -16,4 +16,9 @@ extension KeyboardCell: Equatable, Hashable {
             lhs.row == rhs.row &&
             lhs.col == rhs.col
     }
+    
+    public func hash(into hasher: inout Hasher) {
+           hasher.combine(row)
+           hasher.combine(col)
+    }
 }
