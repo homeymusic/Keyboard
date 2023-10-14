@@ -9,6 +9,7 @@ public enum LabelType {
 }
 
 public enum IntervalType {
+    case tonic
     case perfect
     case consonant
     case dissonant
@@ -20,8 +21,20 @@ struct NitterHouse: Shape {
             path.move(to: CGPoint(x: rect.midX, y: rect.maxY))
             path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
             path.addLine(to: CGPoint(x: rect.minX, y: 0.4*rect.maxY))
-            path.addLine(to: CGPoint(x: rect.midX, y: rect.minY))
+            path.addLine(to: CGPoint(x: rect.midX, y: rect.minY))  // the gable peak
             path.addLine(to: CGPoint(x: rect.maxX, y: 0.4*rect.maxY))
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+            path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
+        }
+    }
+}
+
+struct NitterTent: Shape {
+    func path(in rect: CGRect) -> Path {
+        Path { path in
+            path.move(to: CGPoint(x: rect.midX, y: rect.maxY))
+            path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+            path.addLine(to: CGPoint(x: rect.midX, y: rect.minY)) // the tent peak
             path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
             path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
         }
@@ -38,6 +51,12 @@ struct Diamond: Shape {
             path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
         }
     }
+}
+
+func mod(_ a: Int, _ n: Int) -> Int {
+    precondition(n > 0, "modulus must be positive")
+    let r = a % n
+    return r >= 0 ? r : r + n
 }
 
 /// A default visual representation for a key.
@@ -76,13 +95,13 @@ public struct IntervallicKey: View {
         self.flatTop = flatTop
         self.alignment = alignment
         self.isActivatedExternally = isActivatedExternally
-        self.pitchClass = (self.pitch.intValue - tonicPitchClass) % 12
+        self.pitchClass = mod(self.pitch.intValue - tonicPitchClass, 12)
         self.initialC = initialC
         
         switch self.pitchClass {
         case 0:
             self.iconColor = tonicColor
-            self.intervalType = .perfect
+            self.intervalType = .tonic
             self.keyColor = tonicKeyColor
             self.homeKey = true
         case 5, 7:
@@ -199,11 +218,16 @@ public struct IntervallicKey: View {
                         if (self.labelType == .symbol) {
                             ZStack {
                                 HStack(alignment: .center) {
-                                    if self.intervalType == .perfect {
+                                    if self.intervalType == .tonic {
                                         NitterHouse()
-                                            .stroke(self.iconColor, lineWidth: 2)
+                                            .stroke(self.iconColor, style: StrokeStyle(lineWidth: 3, lineJoin: .round))
                                             .aspectRatio(1.0, contentMode: .fit)
-                                            .frame(width: proxy.size.width*0.3)
+                                            .frame(width: proxy.size.width*0.35)
+                                    } else if self.intervalType == .perfect {
+                                        NitterTent()
+                                            .stroke(self.iconColor, style: StrokeStyle(lineWidth: 2.5, lineJoin: .round))
+                                            .aspectRatio(1.0, contentMode: .fit)
+                                            .frame(width: proxy.size.width*0.275)
                                     } else if self.intervalType == .consonant {
                                         Diamond()
                                             .foregroundColor(self.iconColor)
