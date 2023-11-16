@@ -194,6 +194,10 @@ public struct IntervallicKey: View {
         flatTop && alignment == .trailing ? -relativeCornerRadius(in: size) : 0.5
     }
     
+    func smallerDimension(for proxy: GeometryProxy) -> CGFloat {
+        proxy.size.width <= proxy.size.height ? proxy.size.width : proxy.size.height
+    }
+    
     public var body: some View {
         
         GeometryReader { proxy in
@@ -222,21 +226,21 @@ public struct IntervallicKey: View {
                                         NitterHouse()
                                             .stroke(self.iconColor, style: StrokeStyle(lineWidth: 3, lineJoin: .round))
                                             .aspectRatio(1.0, contentMode: .fit)
-                                            .frame(width: proxy.size.width*0.35)
+                                            .frame(width: smallerDimension(for: proxy)*0.35)
                                     } else if self.intervalType == .perfect {
                                         NitterTent()
                                             .stroke(self.iconColor, style: StrokeStyle(lineWidth: 2.5, lineJoin: .round))
                                             .aspectRatio(1.0, contentMode: .fit)
-                                            .frame(width: proxy.size.width*0.275)
+                                            .frame(width: smallerDimension(for: proxy)*0.275)
                                     } else if self.intervalType == .consonant {
                                         Diamond()
                                             .foregroundColor(self.iconColor)
                                             .aspectRatio(1.0, contentMode: .fit)
-                                            .frame(width: proxy.size.width*0.25)
+                                            .frame(width: smallerDimension(for: proxy)*0.25)
                                     } else if self.intervalType == .dissonant {
                                         Circle()
                                             .foregroundColor(self.iconColor)
-                                            .frame(width: proxy.size.width*0.2)
+                                            .frame(width: smallerDimension(for: proxy)*0.2)
                                     }
                                 }
                             }

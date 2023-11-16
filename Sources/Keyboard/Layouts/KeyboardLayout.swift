@@ -5,5 +5,5 @@ import Tonic
 
 /// Types of keyboards we can generate
 public enum KeyboardLayout: Equatable, Hashable {
-    case dualistic(octaveCount: Int, keysPerRow: Int, tonicPitchClass: Int, initialC: Int)
+    case dualistic(octaveCount: Int, keysPerRow: Int, tonicPitchClass: Int, initialC: Int, orientation: UIDeviceOrientation)
 }
