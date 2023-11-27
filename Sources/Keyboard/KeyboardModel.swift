@@ -47,18 +47,21 @@ class KeyboardModel: ObservableObject {
     
     func triggerEvents(from oldValue: Set<KeyboardCell>, to newValue: Set<KeyboardCell>) {
         let newKeyboardCells = newValue.subtracting(oldValue)
-        let removedKeyboardCells = oldValue.subtracting(newValue)
+        let oldKeyboardCells = oldValue.subtracting(newValue)
         
         for keyboardCell in newKeyboardCells {
             if (!pressedKeyboardCells.contains(keyboardCell)) {
-                noteOn(keyboardCell.pitch, normalizedPoints[keyboardCell.pitch.intValue])
                 pressedKeyboardCells.insert(keyboardCell)
             }
+            noteOn(keyboardCell.pitch, normalizedPoints[keyboardCell.pitch.intValue])
         }
         
-        for keyboardCell in removedKeyboardCells {
-            noteOff(keyboardCell.pitch)
+        for keyboardCell in oldKeyboardCells {
             pressedKeyboardCells.remove(keyboardCell)
+            let currentPitches = pressedKeyboardCells.map{$0.pitch}
+            if !currentPitches.contains(keyboardCell.pitch) {
+                noteOff(keyboardCell.pitch)
+            }
         }
     }
 }
