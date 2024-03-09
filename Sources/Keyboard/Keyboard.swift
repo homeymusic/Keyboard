@@ -38,9 +38,10 @@ public struct Keyboard<Content>: View where Content: View {
     public var body: some View {
         ZStack {
             switch layout {
-            case let .dualistic(octaveCount, keysPerRow, tonicPitchClass, initialC):
+            case let .dualistic(octaveShift, octaveCount, keysPerRow, tonicPitchClass, initialC):
                 Dualistic(content: content,
                           model: model,
+                          octaveShift: octaveShift,
                           octaveCount: octaveCount,
                           keysPerRow: keysPerRow,
                           tonicPitchClass: tonicPitchClass,
