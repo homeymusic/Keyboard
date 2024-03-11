@@ -6,7 +6,7 @@ import Tonic
 struct ContentView: View {
     var body: some View {
         Keyboard()
-        Keyboard(layout: .dualistic)
+        Keyboard(layout: .grid)
         Keyboard(pitchRange: Pitch(0) ... Pitch(60 + 37))
     }
 }

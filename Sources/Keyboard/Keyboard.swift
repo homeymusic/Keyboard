@@ -6,14 +6,14 @@ import SwiftUI
 /// Touch-oriented musical keyboard
 public struct Keyboard<Content>: View where Content: View {
     let content: (KeyboardCell, Pitch, Bool) -> Content
-
+    
     @StateObject var model: KeyboardModel = .init()
-
+    
     var latching: Bool
     var noteOn: (Pitch, CGPoint) -> Void
     var noteOff: (Pitch) -> Void
     var layout: KeyboardLayout
-
+    
     /// Initialize the keyboard
     /// - Parameters:
     ///   - layout: The geometry of the keys
@@ -33,7 +33,7 @@ public struct Keyboard<Content>: View where Content: View {
         self.noteOff = noteOff
         self.content = content
     }
-
+    
     /// Body enclosing the various layout views
     public var body: some View {
         ZStack {
@@ -46,14 +46,22 @@ public struct Keyboard<Content>: View where Content: View {
                           keysPerRow: keysPerRow,
                           tonicPitchClass: tonicPitchClass,
                           initialC: initialC)
+            case let .grid(octaveShift, octaveCount, keysPerRow, tonicPitchClass, initialC):
+                Grid(content: content,
+                     model: model,
+                     octaveShift: octaveShift,
+                     octaveCount: octaveCount,
+                     keysPerRow: keysPerRow,
+                     tonicPitchClass: tonicPitchClass,
+                     initialC: initialC)
             }
-
+            
             if !latching {
                 MultitouchView { touches in
                     model.touchLocations = touches
                 }
             }
-
+            
         }.onPreferenceChange(KeyRectsKey.self) { keyRectInfos in
             model.keyRectInfos = keyRectInfos
         }.onAppear {
@@ -79,12 +87,14 @@ public extension Keyboard where Content == KeyboardKey {
         self.latching = latching
         self.noteOn = noteOn
         self.noteOff = noteOff
-
+        
         var alignment: Alignment = .bottom
-
+        
         let flatTop = false
         switch layout {
         case .dualistic:
+            alignment = .bottom
+        case .grid:
             alignment = .bottom
         }
         content = {
