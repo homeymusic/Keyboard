@@ -86,6 +86,7 @@ public struct IntervallicKey: View {
                 minorColorDark: Color,
                 tritoneColor: Color,
                 tritoneColorDark: Color,
+                mostKeysAreLight: Bool,
                 flatTop: Bool = false,
                 alignment: Alignment = .center,
                 isActivatedExternally: Bool = false)
@@ -106,42 +107,42 @@ public struct IntervallicKey: View {
             self.iconColor = homeColorDark
             self.intervalType = .tonic
             self.keyColor = homeColor
-            self.lightColorKey = false
+            self.lightColorKey = !mostKeysAreLight
         case 5, 7:
             self.iconColor = perfectColorDark
             self.intervalType = .perfect
             self.keyColor = perfectColor
-            self.lightColorKey = true
+            self.lightColorKey = mostKeysAreLight
         case 4, 9:
             self.iconColor = majorColorDark
             self.intervalType = .consonant
             self.keyColor = majorColor
-            self.lightColorKey = true
+            self.lightColorKey = mostKeysAreLight
         case 2, 11:
             self.iconColor = majorColorDark
             self.intervalType = .dissonant
             self.keyColor = majorColor
-            self.lightColorKey = true
+            self.lightColorKey = mostKeysAreLight
         case 3, 8:
             self.iconColor = minorColorDark
             self.intervalType = .consonant
             self.keyColor = minorColor
-            self.lightColorKey = true
+            self.lightColorKey = mostKeysAreLight
         case 1, 10:
             self.iconColor = minorColorDark
             self.intervalType = .dissonant
             self.keyColor = minorColor
-            self.lightColorKey = true
+            self.lightColorKey = mostKeysAreLight
         case 6:
             self.iconColor = tritoneColorDark
             self.intervalType = .dissonant
             self.keyColor = tritoneColor
-            self.lightColorKey = true
+            self.lightColorKey = mostKeysAreLight
         default:
             self.iconColor = .black
             self.intervalType = .dissonant
             self.keyColor = .white
-            self.lightColorKey = false
+            self.lightColorKey = !mostKeysAreLight
         }
     }
     
@@ -232,7 +233,7 @@ public struct IntervallicKey: View {
                                             .foregroundColor(self.iconColor)
 //                                          .stroke(self.iconColor, style: StrokeStyle(lineWidth: 2.5, lineJoin: .round))
                                             .aspectRatio(1.0, contentMode: .fit)
-                                            .frame(width: proxy.size.width*0.35)
+                                            .frame(width: proxy.size.width*0.3)
                                     } else if self.intervalType == .consonant {
                                         Diamond()
                                             .foregroundColor(self.iconColor)
