@@ -76,13 +76,16 @@ public struct IntervallicKey: View {
                 labelType: LabelType,
                 initialC: Int,
                 tonicPitchClass: Int,
-                tonicColor: Color,
+                homeColor: Color,
+                homeColorDark: Color,
                 perfectColor: Color,
+                perfectColorDark: Color,
                 majorColor: Color,
+                majorColorDark: Color,
                 minorColor: Color,
+                minorColorDark: Color,
                 tritoneColor: Color,
-                keyColor: Color,
-                tonicKeyColor: Color,
+                tritoneColorDark: Color,
                 flatTop: Bool = false,
                 alignment: Alignment = .center,
                 isActivatedExternally: Bool = false)
@@ -100,45 +103,45 @@ public struct IntervallicKey: View {
         
         switch self.pitchClass {
         case 0:
-            self.iconColor = tonicColor
+            self.iconColor = homeColorDark
             self.intervalType = .tonic
-            self.keyColor = tonicKeyColor
-            self.homeKey = true
+            self.keyColor = homeColor
+            self.lightColorKey = false
         case 5, 7:
-            self.iconColor = perfectColor
+            self.iconColor = perfectColorDark
             self.intervalType = .perfect
-            self.keyColor = keyColor
-            self.homeKey = false
+            self.keyColor = perfectColor
+            self.lightColorKey = true
         case 4, 9:
-            self.iconColor = majorColor
+            self.iconColor = majorColorDark
             self.intervalType = .consonant
-            self.keyColor = keyColor
-            self.homeKey = false
+            self.keyColor = majorColor
+            self.lightColorKey = true
         case 2, 11:
-            self.iconColor = majorColor
+            self.iconColor = majorColorDark
             self.intervalType = .dissonant
-            self.keyColor = keyColor
-            self.homeKey = false
+            self.keyColor = majorColor
+            self.lightColorKey = true
         case 3, 8:
-            self.iconColor = minorColor
+            self.iconColor = minorColorDark
             self.intervalType = .consonant
-            self.keyColor = keyColor
-            self.homeKey = false
+            self.keyColor = minorColor
+            self.lightColorKey = true
         case 1, 10:
-            self.iconColor = minorColor
+            self.iconColor = minorColorDark
             self.intervalType = .dissonant
-            self.keyColor = keyColor
-            self.homeKey = false
+            self.keyColor = minorColor
+            self.lightColorKey = true
         case 6:
-            self.iconColor = tritoneColor
+            self.iconColor = tritoneColorDark
             self.intervalType = .dissonant
-            self.keyColor = keyColor
-            self.homeKey = false
+            self.keyColor = tritoneColor
+            self.lightColorKey = true
         default:
             self.iconColor = .black
             self.intervalType = .dissonant
             self.keyColor = .white
-            self.homeKey = false
+            self.lightColorKey = false
         }
     }
     
@@ -154,7 +157,7 @@ public struct IntervallicKey: View {
     var iconColor: Color
     var intervalType: IntervalType
     let pitchClass: Int
-    let homeKey: Bool
+    let lightColorKey: Bool
     let initialC: Int
     
     public var inPrimaryZone: Bool = false
@@ -220,14 +223,16 @@ public struct IntervallicKey: View {
                                 HStack(alignment: .center) {
                                     if self.intervalType == .tonic {
                                         NitterHouse()
-                                            .stroke(self.iconColor, style: StrokeStyle(lineWidth: 3, lineJoin: .round))
+                                            .foregroundColor(self.iconColor)
+//                                            .stroke(self.iconColor, style: StrokeStyle(lineWidth: 3, lineJoin: .round))
                                             .aspectRatio(1.0, contentMode: .fit)
                                             .frame(width: proxy.size.width*0.35)
                                     } else if self.intervalType == .perfect {
                                         NitterTent()
-                                            .stroke(self.iconColor, style: StrokeStyle(lineWidth: 2.5, lineJoin: .round))
+                                            .foregroundColor(self.iconColor)
+//                                          .stroke(self.iconColor, style: StrokeStyle(lineWidth: 2.5, lineJoin: .round))
                                             .aspectRatio(1.0, contentMode: .fit)
-                                            .frame(width: proxy.size.width*0.275)
+                                            .frame(width: proxy.size.width*0.35)
                                     } else if self.intervalType == .consonant {
                                         Diamond()
                                             .foregroundColor(self.iconColor)
@@ -243,9 +248,9 @@ public struct IntervallicKey: View {
                         }
                     }
                 }
-                .brightness(((isActivated || isActivatedExternally) && self.labelType == .symbol) ? (homeKey ? -0.35 : -0.05): 0)
+                .brightness(((isActivated || isActivatedExternally) && self.labelType == .symbol) ? (lightColorKey ? -0.35 : -0.05): 0)
                 .mask(
-                    RadialGradient(colors: [.black.opacity(((isActivated || isActivatedExternally) && self.labelType == .symbol) ? (homeKey ? 0.7 : 0.9) : 0.95), .black],
+                    RadialGradient(colors: [.black.opacity(((isActivated || isActivatedExternally) && self.labelType == .symbol) ? (lightColorKey ? 0.7 : 0.9) : 0.95), .black],
                                    center: (isActivated || isActivatedExternally && self.labelType == .symbol) ? .top : .bottom,
                                    startRadius: 0,
                                    endRadius: proxy.size.height * 0.5)
