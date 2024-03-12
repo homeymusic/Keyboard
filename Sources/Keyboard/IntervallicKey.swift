@@ -223,15 +223,21 @@ public struct IntervallicKey: View {
                                     if self.intervalType == .tonic {
                                         NitterHouse()
                                             .foregroundColor(self.iconColor)
-//                                            .stroke(self.iconColor, style: StrokeStyle(lineWidth: 3, lineJoin: .round))
                                             .aspectRatio(1.0, contentMode: .fit)
                                             .frame(width: proxy.size.width*0.35)
                                     } else if self.intervalType == .perfect {
-                                        NitterTent()
-                                            .foregroundColor(self.iconColor)
-//                                          .stroke(self.iconColor, style: StrokeStyle(lineWidth: 2.5, lineJoin: .round))
-                                            .aspectRatio(1.0, contentMode: .fit)
-                                            .frame(width: proxy.size.width*0.3)
+                                        VStack(spacing: 0) {
+                                            NitterTent()
+                                                .foregroundColor(self.iconColor)
+                                                .aspectRatio(1.0, contentMode: .fit)
+                                                .frame(width: proxy.size.width*0.3)
+                                                .offset(y: proxy.size.height * 0.25 + 0.5 * proxy.size.width*0.3)
+                                            NitterTent()
+                                                .foregroundColor(self.iconColor)
+                                                .aspectRatio(1.0, contentMode: .fit)
+                                                .frame(width: proxy.size.width*0.3)
+                                                .offset(y: -proxy.size.height * 0.25 - 0.5 * proxy.size.width*0.3)
+                                        }
                                     } else if self.intervalType == .consonant {
                                         Diamond()
                                             .foregroundColor(self.iconColor)
