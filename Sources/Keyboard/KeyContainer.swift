@@ -7,14 +7,14 @@ import Tonic
 /// visual representation.
 struct KeyContainer<Content: View>: View {
     let content: (KeyboardCell, Pitch, Bool) -> Content
-
+    
     @ObservedObject var model: KeyboardModel
     
     let keyboardCell: KeyboardCell
     let pitch: Pitch
     
     var zIndex: Int
-
+    
     init(model: KeyboardModel,
          keyboardCell: KeyboardCell,
          pitch: Pitch,
@@ -27,7 +27,7 @@ struct KeyContainer<Content: View>: View {
         self.zIndex = zIndex
         self.content = content
     }
-
+    
     func rect(rect: CGRect) -> some View {
         let isPitchOn = model.touchedKeyboardCells.map {
             return $0.pitch
@@ -52,7 +52,7 @@ struct KeyContainer<Content: View>: View {
                                             pitch: pitch,
                                             zIndex: zIndex)])
     }
-
+    
     public var body: some View {
         GeometryReader { proxy in
             rect(rect: proxy.frame(in: .global))
