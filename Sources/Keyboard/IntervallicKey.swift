@@ -167,10 +167,6 @@ public struct IntervallicKey: View {
         return min(size.width, size.height)
     }
     
-    func isTall(size: CGSize) -> Bool {
-        size.height > size.width
-    }
-    
     // How much of the key height to take up with label
     func relativeFontSize(in containerSize: CGSize) -> CGFloat {
         minDimension(containerSize) * 0.333
