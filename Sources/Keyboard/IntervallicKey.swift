@@ -87,6 +87,7 @@ public struct IntervallicKey: View {
                 tritoneColor: Color,
                 tritoneColorDark: Color,
                 mostKeysAreLight: Bool,
+                homeKeyIsLight: Bool,
                 flatTop: Bool = false,
                 alignment: Alignment = .center,
                 isActivatedExternally: Bool = false)
@@ -107,7 +108,7 @@ public struct IntervallicKey: View {
             self.iconColor = homeColorDark
             self.intervalType = .tonic
             self.keyColor = homeColor
-            self.lightColorKey = !mostKeysAreLight
+            self.lightColorKey = homeKeyIsLight
         case 5, 7:
             self.iconColor = perfectColorDark
             self.intervalType = .perfect
