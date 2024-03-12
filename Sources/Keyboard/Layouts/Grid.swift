@@ -13,7 +13,7 @@ struct Grid<Content>: View where Content: View {
     let skipColumns = [2,4,6,7,9,11]
     
     func tritoneLength(_ proxySize: CGSize) -> CGFloat {
-        return min(proxySize.height * 0.33, proxySize.width * 0.66)
+        return min(proxySize.height * 0.3125, proxySize.width * 0.625)
     }
     
     var body: some View {
