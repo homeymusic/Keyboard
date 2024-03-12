@@ -11,6 +11,11 @@ struct Grid<Content>: View where Content: View {
     let initialC: Int
     let doubleColumns = [1,3,8,10]
     let skipColumns = [2,4,6,7,9,11]
+    
+    func tritoneLength(_ proxySize: CGSize) -> CGFloat {
+        return min(proxySize.height * 0.33, proxySize.width * 0.66)
+    }
+    
     var body: some View {
         let tonicPitch : Int = initialC + tonicPitchClass
         
@@ -45,13 +50,14 @@ struct Grid<Content>: View where Content: View {
                                              content: content)
                                 .overlay() {
                                     GeometryReader { proxy in
+                                        let ttLength = tritoneLength(proxy.size)
                                         KeyContainer(model: model,
                                                      keyboardCell: KeyboardCell(row: row, col: col + 1, pitch: Pitch(intValue: midi + 1)),
                                                      pitch: Pitch(intValue: midi + 1),
                                                      zIndex: 1,
                                                      content: content)
-                                        .frame(height: proxy.size.width)
-                                        .offset(x: -proxy.size.width / 2.0, y: proxy.size.height / 2.0 - proxy.size.width / 2.0)
+                                        .frame(width: ttLength, height: ttLength)
+                                        .offset(x: -ttLength / 2.0, y: proxy.size.height / 2.0 - ttLength / 2.0)
                                     }
                                 }
                             } else if (skipColumns.contains(mod(col, 12))) {

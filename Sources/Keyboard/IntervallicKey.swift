@@ -88,6 +88,7 @@ public struct IntervallicKey: View {
                 tritoneColorDark: Color,
                 mostKeysAreLight: Bool,
                 homeKeyIsLight: Bool,
+                linearLayout: Bool,
                 flatTop: Bool = false,
                 alignment: Alignment = .center,
                 isActivatedExternally: Bool = false)
@@ -102,6 +103,7 @@ public struct IntervallicKey: View {
         self.isActivatedExternally = isActivatedExternally
         self.pitchClass = mod(self.pitch.intValue - tonicPitchClass, 12)
         self.initialC = initialC
+        self.linearLayout = linearLayout
         
         switch self.pitchClass {
         case 0:
@@ -161,6 +163,7 @@ public struct IntervallicKey: View {
     let pitchClass: Int
     let lightColorKey: Bool
     let initialC: Int
+    let linearLayout: Bool
     
     public var inPrimaryZone: Bool = false
     
@@ -236,17 +239,24 @@ public struct IntervallicKey: View {
                                             .aspectRatio(1.0, contentMode: .fit)
                                             .frame(width: proxy.size.width*0.35)
                                     } else if self.intervalType == .perfect {
-                                        VStack(spacing: 0) {
+                                        if self.linearLayout {
                                             NitterTent()
                                                 .foregroundColor(self.iconColor)
                                                 .aspectRatio(1.0, contentMode: .fit)
                                                 .frame(width: proxy.size.width*0.3)
-                                                .offset(y: proxy.size.height * 0.25 + 0.5 * proxy.size.width*0.3)
-                                            NitterTent()
-                                                .foregroundColor(self.iconColor)
-                                                .aspectRatio(1.0, contentMode: .fit)
-                                                .frame(width: proxy.size.width*0.3)
-                                                .offset(y: -proxy.size.height * 0.25 - 0.5 * proxy.size.width*0.3)
+                                        } else {
+                                            VStack(spacing: 0) {
+                                                NitterTent()
+                                                    .foregroundColor(self.iconColor)
+                                                    .aspectRatio(1.0, contentMode: .fit)
+                                                    .frame(width: proxy.size.width*0.3)
+                                                    .offset(y: proxy.size.height * 0.25 + 0.5 * proxy.size.width*0.3)
+                                                NitterTent()
+                                                    .foregroundColor(self.iconColor)
+                                                    .aspectRatio(1.0, contentMode: .fit)
+                                                    .frame(width: proxy.size.width*0.3)
+                                                    .offset(y: -proxy.size.height * 0.25 - 0.5 * proxy.size.width*0.3)
+                                            }
                                         }
                                     } else if self.intervalType == .consonant {
                                         Diamond()
