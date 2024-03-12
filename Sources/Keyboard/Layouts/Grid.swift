@@ -33,6 +33,7 @@ struct Grid<Content>: View where Content: View {
                                                  pitch: Pitch(intValue: midi),
                                                  content: content)
                                 }
+                                .padding(0)
                             } else if (mod(col, 12) == 5 && col > 0) {
                                 KeyContainer(model: model,
                                              keyboardCell: KeyboardCell(row: row, col: col, pitch: Pitch(intValue: midi)),

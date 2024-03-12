@@ -209,13 +209,23 @@ public struct IntervallicKey: View {
                     .padding(.leading, negativeLeadingPadding(proxy.size))
                     .padding(.trailing, 0.5)
                 ZStack(alignment: alignment) {
-                    Rectangle().foregroundColor(keyColor)
+                    let r = Rectangle()
+                        .foregroundColor(keyColor)
                         .padding(.top, topPadding(proxy.size))
                         .padding(.leading, leadingPadding(proxy.size))
                         .cornerRadius(relativeCornerRadius(in: proxy.size))
                         .padding(.top, negativeTopPadding(proxy.size))
                         .padding(.leading, negativeLeadingPadding(proxy.size))
                         .padding(.trailing, 0.5)
+                    if (self.pitchClass == 6) {
+                        r.overlay( /// apply a rounded border
+                            RoundedRectangle(cornerRadius: relativeCornerRadius(in: proxy.size))
+                                .stroke(.black, lineWidth: 2)
+                        )
+                    } else {
+                        r
+                    }
+                    
                     VStack {
                         if (self.labelType == .symbol) {
                             ZStack {
