@@ -199,14 +199,6 @@ public struct IntervallicKey: View {
         
         GeometryReader { proxy in
             ZStack {
-                Rectangle().foregroundColor(.white)
-                    .padding(.top, topPadding(proxy.size))
-                
-                    .padding(.leading, leadingPadding(proxy.size))
-                    .cornerRadius(relativeCornerRadius(in: proxy.size))
-                    .padding(.top, negativeTopPadding(proxy.size))
-                    .padding(.leading, negativeLeadingPadding(proxy.size))
-                    .padding(.trailing, 0.5)
                 ZStack(alignment: alignment) {
                     Rectangle().foregroundColor(keyColor)
                         .padding(.top, topPadding(proxy.size))
