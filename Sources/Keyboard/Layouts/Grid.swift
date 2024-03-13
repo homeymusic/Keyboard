@@ -6,7 +6,7 @@ struct Grid<Content>: View where Content: View {
     var model: KeyboardModel
     var octaveShift: Int
     var octaveCount: Int
-    var linearKeysPerRow: Int
+    var keysPerRow: Int
     var tonicPitchClass: Int
     let initialC: Int
     let doubleColumns = [1,3,8,10]
@@ -18,9 +18,12 @@ struct Grid<Content>: View where Content: View {
     
     var body: some View {
         let tonicPitch : Int = initialC + tonicPitchClass
-        
-        let extraColsPerSide : Int = Int(floor(CGFloat(linearKeysPerRow - 13) / 2))
+        let _foo = print("octaveCount", octaveCount)
+
+        let extraColsPerSide : Int = Int(floor(CGFloat(keysPerRow - 13) / 2))
         let extraRowsPerSide : Int = Int(floor(CGFloat(octaveCount - 1) / 2))
+        let _bar = print("extraRowsPerSide", extraRowsPerSide)
+        
         VStack(spacing: 0) {
             ForEach((-extraRowsPerSide...extraRowsPerSide).reversed(), id: \.self) { row in
                 HStack(spacing: 0) {

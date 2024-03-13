@@ -220,7 +220,7 @@ public struct IntervallicKey: View {
                         .padding(.top, negativeTopPadding(proxy.size))
                         .padding(.leading, negativeLeadingPadding(proxy.size))
                         .padding(.trailing, 0.5)
-                    if (self.pitchClass == 6) {
+                    if (self.pitchClass == 6 && !self.linearLayout) {
                         r.overlay( /// apply a rounded border
                             RoundedRectangle(cornerRadius: relativeCornerRadius(in: proxy.size))
                                 .stroke(.black, lineWidth: 2)

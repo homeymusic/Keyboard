@@ -43,7 +43,7 @@ public struct Keyboard<Content>: View where Content: View {
                           model: model,
                           octaveShift: octaveShift,
                           octaveCount: octaveCount,
-                          linearKeysPerRow: keysPerRow,
+                          keysPerRow: keysPerRow,
                           tonicPitchClass: tonicPitchClass,
                           initialC: initialC)
             case let .grid(octaveShift, octaveCount, keysPerRow, tonicPitchClass, initialC):
@@ -51,7 +51,7 @@ public struct Keyboard<Content>: View where Content: View {
                      model: model,
                      octaveShift: octaveShift,
                      octaveCount: octaveCount,
-                     linearKeysPerRow: keysPerRow,
+                     keysPerRow: keysPerRow,
                      tonicPitchClass: tonicPitchClass,
                      initialC: initialC)
             }
