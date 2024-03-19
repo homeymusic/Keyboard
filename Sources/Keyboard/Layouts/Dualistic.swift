@@ -8,6 +8,7 @@ struct Dualistic<Content>: View where Content: View {
     var octaveCount: Int
     var keysPerRow: Int
     var tonicPitchClass: Int
+    var upwardPitchMovement: Bool
     let initialC: Int
     
     var body: some View {
@@ -19,7 +20,7 @@ struct Dualistic<Content>: View where Content: View {
             ForEach((-extraRowsPerSide...extraRowsPerSide).reversed(), id: \.self) { row in
                 HStack(spacing: 0) {
                     ForEach(-extraColsPerSide...(12+extraColsPerSide), id: \.self) { col in
-                        let midi = row * 12 + col + tonicPitch + 12 * octaveShift
+                        let midi = row * 12 + col + tonicPitch + 12 * octaveShift - (upwardPitchMovement ? 0 : 12)
                         if (midi >= 0 && midi <= 127) {
                             KeyContainer(model: model,
                                          keyboardCell: KeyboardCell(row: row, col: col, pitch: Pitch(intValue: midi)),

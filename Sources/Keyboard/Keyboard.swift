@@ -38,21 +38,23 @@ public struct Keyboard<Content>: View where Content: View {
     public var body: some View {
         ZStack {
             switch layout {
-            case let .dualistic(octaveShift, octaveCount, keysPerRow, tonicPitchClass, initialC):
+            case let .dualistic(octaveShift, octaveCount, keysPerRow, tonicPitchClass, upwardPitchMovement, initialC):
                 Dualistic(content: content,
                           model: model,
                           octaveShift: octaveShift,
                           octaveCount: octaveCount,
                           keysPerRow: keysPerRow,
                           tonicPitchClass: tonicPitchClass,
+                          upwardPitchMovement: upwardPitchMovement,
                           initialC: initialC)
-            case let .grid(octaveShift, octaveCount, keysPerRow, tonicPitchClass, initialC):
+            case let .grid(octaveShift, octaveCount, keysPerRow, tonicPitchClass, upwardPitchMovement, initialC):
                 Grid(content: content,
                      model: model,
                      octaveShift: octaveShift,
                      octaveCount: octaveCount,
                      keysPerRow: keysPerRow,
                      tonicPitchClass: tonicPitchClass,
+                     upwardPitchMovement: upwardPitchMovement,
                      initialC: initialC)
             }
             

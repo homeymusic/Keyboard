@@ -8,6 +8,7 @@ struct Grid<Content>: View where Content: View {
     var octaveCount: Int
     var keysPerRow: Int
     var tonicPitchClass: Int
+    var upwardPitchMovement: Bool
     let initialC: Int
     let doubleColumns = [1,3,8,10]
     let skipColumns = [2,4,6,7,9,11]
@@ -26,7 +27,7 @@ struct Grid<Content>: View where Content: View {
             ForEach((-extraRowsPerSide...extraRowsPerSide).reversed(), id: \.self) { row in
                 HStack(spacing: 0) {
                     ForEach(-extraColsPerSide...(12+extraColsPerSide), id: \.self) { col in
-                        let midi = row * 12 + col + tonicPitch + 12 * octaveShift
+                        let midi = row * 12 + col + tonicPitch + 12 * octaveShift - (upwardPitchMovement ? 0 : 12)
                         if (midi >= 0 && midi <= 127) {
                             if (doubleColumns.contains(mod(col, 12))) {
                                 VStack(spacing: 0) {
