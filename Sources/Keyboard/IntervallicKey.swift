@@ -88,7 +88,7 @@ public struct IntervallicKey: View {
                 tritoneColorDark: Color,
                 mostKeysAreLight: Bool,
                 homeKeyIsLight: Bool,
-                linearLayout: Bool,
+                homeyLayout: Keyboard.HomeyLayout,
                 flatTop: Bool = false,
                 alignment: Alignment = .center,
                 isActivatedExternally: Bool = false)
@@ -103,7 +103,7 @@ public struct IntervallicKey: View {
         self.isActivatedExternally = isActivatedExternally
         self.pitchClass = mod(self.pitch.intValue - tonicPitchClass, 12)
         self.initialC = initialC
-        self.linearLayout = linearLayout
+        self.homeyLayout = homeyLayout
         
         switch self.pitchClass {
         case 0:
@@ -163,7 +163,7 @@ public struct IntervallicKey: View {
     let pitchClass: Int
     let lightColorKey: Bool
     let initialC: Int
-    let linearLayout: Bool
+    let homeyLayout: HomeyLayout
     
     public var inPrimaryZone: Bool = false
     
@@ -220,7 +220,7 @@ public struct IntervallicKey: View {
                         .padding(.top, negativeTopPadding(proxy.size))
                         .padding(.leading, negativeLeadingPadding(proxy.size))
                         .padding(.trailing, 0.5)
-                    if (self.pitchClass == 6 && !self.linearLayout) {
+                    if (self.pitchClass == 6 && self.homeyLayout == .grid) {
                         r.overlay( /// apply a rounded border
                             RoundedRectangle(cornerRadius: relativeCornerRadius(in: proxy.size))
                                 .stroke(.black, lineWidth: 2)
@@ -239,12 +239,12 @@ public struct IntervallicKey: View {
                                             .aspectRatio(1.0, contentMode: .fit)
                                             .frame(width: proxy.size.width*0.35)
                                     } else if self.intervalType == .perfect {
-                                        if self.linearLayout {
+                                        if self.homeyLayout == .linear {
                                             NitterTent()
                                                 .foregroundColor(self.iconColor)
                                                 .aspectRatio(1.0, contentMode: .fit)
                                                 .frame(width: proxy.size.width*0.3)
-                                        } else {
+                                        } else if self.homeyLayout == .grid {
                                             VStack(spacing: 0) {
                                                 NitterTent()
                                                     .foregroundColor(self.iconColor)

@@ -5,6 +5,14 @@ import SwiftUI
 
 /// Touch-oriented musical keyboard
 public struct Keyboard<Content>: View where Content: View {
+    
+    public enum HomeyLayout: Int, Equatable, CaseIterable {
+        case grid = 1
+        case linear = 2
+        case piano = 3
+        case guitar = 4
+    }
+
     let content: (KeyboardCell, Pitch, Bool) -> Content
     
     @StateObject var model: KeyboardModel = .init()
